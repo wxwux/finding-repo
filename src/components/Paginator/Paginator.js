@@ -1,11 +1,11 @@
 import React from "react";
 import { connect } from "react-redux";
-import { parseSearchQueryFromLink } from "../../helpers/queries";
+import { parseSearchQueryFromUrl } from "../../helpers/queries";
 import { fetchReposByQueryRequest } from "../../store/actions";
 
 const Paginator = ({ pagination, fetchReposByQueryRequest }) => {
   const navigate = (url) => {
-    const query = parseSearchQueryFromLink(url);
+    const query = parseSearchQueryFromUrl(url);
     fetchReposByQueryRequest(query);
   };
 
