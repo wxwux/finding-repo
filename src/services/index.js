@@ -1,9 +1,6 @@
 import $axios from "../requests";
 
-export const fetchReposByTitle = async (reposTitle) => {
-  const {
-    data: { items },
-  } = await $axios.get(`/search/repositories?q=${reposTitle}`);
-
-  return items;
+export const fetchReposByQuery = async (query) => {
+  const result = await $axios.get(`/search/repositories${query}`);
+  return result;
 };

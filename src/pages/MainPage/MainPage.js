@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
-import { fetchReposRequest } from "../../store/actions";
+import { fetchReposByQueryRequest } from "../../store/actions";
+import Paginator from "../../components/Paginator";
+import { queryConstructor } from "../../helpers/queries";
 
-const MainPage = ({ repos, fetchReposRequest }) => {
+const MainPage = ({ repos, fetchReposByQueryRequest }) => {
   const [title, setTitle] = useState("");
 
   const handleChange = (e) => {
@@ -11,10 +13,10 @@ const MainPage = ({ repos, fetchReposRequest }) => {
 
   const sendRequest = (e) => {
     e.preventDefault();
-    console.log(title);
     setTitle("");
 
-    fetchReposRequest(title);
+    const query = queryConstructor.byTitle(title);
+    fetchReposByQueryRequest(query);
   };
 
   const tableRows = repos.data.map((repo) => {
@@ -40,6 +42,7 @@ const MainPage = ({ repos, fetchReposRequest }) => {
         />
         <button type="submit">Отправить</button>
       </form>
+      <Paginator />
       <table>
         <tbody>{tableRows}</tbody>
       </table>
@@ -47,7 +50,7 @@ const MainPage = ({ repos, fetchReposRequest }) => {
   );
 };
 
-const mapDispatchToProps = { fetchReposRequest };
+const mapDispatchToProps = { fetchReposByQueryRequest };
 
 const mapStateToProps = (state) => ({
   repos: state,
