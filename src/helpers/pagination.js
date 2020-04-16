@@ -111,10 +111,10 @@ export class Pagination {
     const prev = this.getLinkObjectByRel("prev", transformToProperFormat);
 
     return {
+      ...prev,
+      ...next,
       total: this.getTotal(),
       active: this.getActivePage(),
-      ...next,
-      ...prev,
     };
   }
 }

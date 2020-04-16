@@ -3,7 +3,7 @@ import {
   fetchReposByQueryRequest,
   fetchReposByQuerySuccess,
 } from "./actions";
-import parsePaginationHeader from "../helpers/paginationParser";
+import {Pagination} from "../helpers/pagination";
 
 import * as reposService from "../services";
 
@@ -11,10 +11,11 @@ export default function* rootSaga() {
   yield takeEvery(fetchReposByQueryRequest, function* ({ payload: query }) {
     try {
       const result = yield call(reposService.fetchReposByQuery, query);
+      const pagination = new Pagination(result.headers.link);
       yield put(
         fetchReposByQuerySuccess({
           data: result.data.items,
-          pagination: parsePaginationHeader(result.headers.link),
+          pagination: pagination.generate()
         })
       );
     } catch (error) {

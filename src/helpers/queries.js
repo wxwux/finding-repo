@@ -2,6 +2,9 @@ export const queryConstructor = {
   byTitle(title) {
     return `?q=${title}`;
   },
+  byPageForTitle(page, title) {
+    return `?q=${title}&page=${page}`;
+  },
 };
 
 export const parseSearchQueryFromUrl = (url) => {
