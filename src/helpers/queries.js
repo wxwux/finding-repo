@@ -4,7 +4,26 @@ export const queryConstructor = {
   },
 };
 
-export const parseSearchQueryFromLink = link => {
-  const url = new URL(link);
-  return url.search;
-}
+export const parseSearchQueryFromUrl = (url) => {
+  if (!url) return "";
+
+  const parsedUrl = new URL(url);
+  return parsedUrl.search;
+};
+
+export const getParamFromQueryString = (query, paramName) => {
+  const params = new URLSearchParams(query);
+  return params.get(paramName);
+};
+
+export const getPageValueFromUrl = (url) => {
+  const linkSearchQuery = parseSearchQueryFromUrl(url);
+  const pageParamValue = getParamFromQueryString(linkSearchQuery, "page");
+
+  if (Boolean(pageParamValue) === false) {
+    console.warn("no param has been found in the query");
+    return 0;
+  }
+
+  return Number(pageParamValue);
+};
