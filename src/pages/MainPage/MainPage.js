@@ -33,7 +33,7 @@ const MainPage = ({ repos, fetchReposByQueryRequest }) => {
 
   return (
     <>
-      <h1>Finding Repo</h1>
+      <h1>FINDING REPO</h1>
       <form onSubmit={sendRequest}>
         <input
           placeholder="Enter the name"
