@@ -103,6 +103,8 @@ export class Pagination {
   }
 
   generate() {
+    if (!this.linkString) return {}
+    
     const transformToProperFormat = ({ url, rel }) => ({
       [rel]: url,
     });
