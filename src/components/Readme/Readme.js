@@ -2,7 +2,9 @@ import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { fetchReadmeRequest } from "../../store/actions";
 import { useParams } from "react-router-dom";
-import { markdown } from "markdown-js";
+
+import { decodeToUnicode } from "../../helpers/base64";
+import MarkdownIt from "markdown-it";
 
 const Readme = ({ fetchReadmeRequest, readme }) => {
   const { owner, title } = useParams();
@@ -12,26 +14,15 @@ const Readme = ({ fetchReadmeRequest, readme }) => {
     fetchReadmeRequest({ owner, title });
   }, [fetchReadmeRequest, owner, title]);
 
-  const b64DecodeUnicode = (str) => {
-    return decodeURIComponent(
-      atob(str)
-        .split("")
-        .map(function (c) {
-          return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
-        })
-        .join("")
-    );
-  };
 
   if (!data) {
     return "no data";
   } else {
-    // const content = toBinary(data.content);
-    // console.log("content", content);
-    const content = b64DecodeUnicode(data.content);
-    const markup = markdown.toHTML(content);
+    const content = decodeToUnicode(data.content);
+    const markdown = new MarkdownIt();
+    const markup = markdown.render(content);
 
-    return <div>{markup}</div>;
+    return <div dangerouslySetInnerHTML={{ __html: markup }} />;
   }
 };
 
