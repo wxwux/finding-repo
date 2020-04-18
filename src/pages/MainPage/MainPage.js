@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 
 import { fetchReposByQueryRequest } from "../../store/actions";
 import { queryConstructor } from "../../helpers/queries";
@@ -42,7 +43,9 @@ const MainPage = ({ repos, fetchReposByQueryRequest }) => {
         <td>
           <img src={repo.owner["avatar_url"]} width="100" alt="avatar" />
         </td>
-        <td>datails</td>
+        <td>
+          <Link to={repo["full_name"]}>Details</Link>
+        </td>
       </tr>
     );
   });
@@ -93,8 +96,6 @@ const MainPage = ({ repos, fetchReposByQueryRequest }) => {
 
 const mapDispatchToProps = { fetchReposByQueryRequest };
 
-const mapStateToProps = (state) => ({
-  repos: state,
-});
+const mapStateToProps = ({ repos }) => ({ repos });
 
 export default connect(mapStateToProps, mapDispatchToProps)(MainPage);
