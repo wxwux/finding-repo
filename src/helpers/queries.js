@@ -5,6 +5,9 @@ export const queryConstructor = {
   byPageForTitle(page, title) {
     return `?q=${title}&page=${page}`;
   },
+  byOwnerAndTitle(owner, title) {
+    return `/${owner}/${title}`;
+  }
 };
 
 export const parseSearchQueryFromUrl = (url) => {

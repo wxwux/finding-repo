@@ -16,3 +16,8 @@ body {
   justify-content: flex-start;
   flex-direction: column;
 }
+
+img {
+  display: block;
+  max-width: 100%;
+}
