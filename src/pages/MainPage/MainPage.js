@@ -7,6 +7,7 @@ import {
   addSearchHistoryItem,
 } from "../../store/actions";
 import { queryConstructor } from "../../helpers/queries";
+import { lastSearchSelector } from "../../store/selectors";
 
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -23,6 +24,7 @@ const MainPage = ({
   repos,
   fetchReposByQueryRequest,
   addSearchHistoryItem,
+  lastSearchedItem
 }) => {
   const [title, setTitle] = useState("");
   const classes = useStyles();
@@ -33,6 +35,13 @@ const MainPage = ({
 
   const sendRequest = (e) => {
     e.preventDefault();
+    const wasSearchedLately = title === lastSearchedItem;
+
+    if (wasSearchedLately) {
+      setTitle("");
+      return;
+    }
+
     const query = queryConstructor.byTitle(title);
     fetchReposByQueryRequest(query);
 
@@ -41,7 +50,7 @@ const MainPage = ({
   };
 
   const handlePaginationChange = (e, pageNum) => {
-    const query = queryConstructor.byPageForTitle(pageNum, title);
+    const query = queryConstructor.byPageForTitle(pageNum, lastSearchedItem);
     fetchReposByQueryRequest(query);
   };
 
@@ -106,6 +115,9 @@ const MainPage = ({
 
 const mapDispatchToProps = { fetchReposByQueryRequest, addSearchHistoryItem };
 
-const mapStateToProps = ({ repos }) => ({ repos });
+const mapStateToProps = (state) => ({
+  repos: state.repos,
+  lastSearchedItem: lastSearchSelector(state),
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(MainPage);
