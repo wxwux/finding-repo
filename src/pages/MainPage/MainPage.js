@@ -2,7 +2,10 @@ import React, { useState } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 
-import { fetchReposByQueryRequest } from "../../store/actions";
+import {
+  fetchReposByQueryRequest,
+  addSearchHistoryItem,
+} from "../../store/actions";
 import { queryConstructor } from "../../helpers/queries";
 
 import AppBar from "@material-ui/core/AppBar";
@@ -11,11 +14,16 @@ import Typography from "@material-ui/core/Typography";
 import InputBase from "@material-ui/core/InputBase";
 import SearchIcon from "@material-ui/icons/Search";
 import Pagination from "@material-ui/lab/Pagination";
+import SearchHistory from "../../components/SearchHistory";
 
 import "./MainPage.css";
 import useStyles from "./MainPageUITheme";
 
-const MainPage = ({ repos, fetchReposByQueryRequest }) => {
+const MainPage = ({
+  repos,
+  fetchReposByQueryRequest,
+  addSearchHistoryItem,
+}) => {
   const [title, setTitle] = useState("");
   const classes = useStyles();
 
@@ -25,10 +33,11 @@ const MainPage = ({ repos, fetchReposByQueryRequest }) => {
 
   const sendRequest = (e) => {
     e.preventDefault();
-    // setTitle("");
-
     const query = queryConstructor.byTitle(title);
     fetchReposByQueryRequest(query);
+
+    addSearchHistoryItem(title);
+    setTitle("");
   };
 
   const handlePaginationChange = (e, pageNum) => {
@@ -87,6 +96,7 @@ const MainPage = ({ repos, fetchReposByQueryRequest }) => {
         />
       )}
 
+      <SearchHistory />
       <table>
         <tbody>{tableRows}</tbody>
       </table>
@@ -94,7 +104,7 @@ const MainPage = ({ repos, fetchReposByQueryRequest }) => {
   );
 };
 
-const mapDispatchToProps = { fetchReposByQueryRequest };
+const mapDispatchToProps = { fetchReposByQueryRequest, addSearchHistoryItem };
 
 const mapStateToProps = ({ repos }) => ({ repos });
 

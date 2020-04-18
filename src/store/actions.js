@@ -17,3 +17,5 @@ export const fetchSingleRepoFailure = createAction("FETCH_SINGLE_REPO_FAILURE");
 export const fetchReadmeSuccess = createAction("FETCH_README_SUCCESS");
 export const fetchReadmeRequest = createAction("FETCH_README_REQUEST");
 export const fetchReadmeFailure = createAction("FETCH_README_FAILURE");
+
+export const addSearchHistoryItem = createAction("ADD_SEARCH_HISTORY_ITEM");
