@@ -1,0 +1,8 @@
+.app-container {
+  width: 60%;
+  padding: 30px;
+  background: #fff;
+  border-radius: 7px;
+  box-shadow: 0 0 11px 0 rgba(32, 60, 90, .05);
+  margin-top: 40px;
+}
