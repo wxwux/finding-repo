@@ -9,8 +9,7 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import InputBase from "@material-ui/core/InputBase";
 import SearchIcon from "@material-ui/icons/Search";
-import Paginator from "../../components/Paginator";
-import Button from "@material-ui/core/Button";
+import Pagination from "@material-ui/lab/Pagination";
 
 import "./MainPage.css";
 import useStyles from "./MainPageUITheme";
@@ -25,9 +24,14 @@ const MainPage = ({ repos, fetchReposByQueryRequest }) => {
 
   const sendRequest = (e) => {
     e.preventDefault();
-    setTitle("");
+    // setTitle("");
 
     const query = queryConstructor.byTitle(title);
+    fetchReposByQueryRequest(query);
+  };
+
+  const handlePaginationChange = (e, pageNum) => {
+    const query = queryConstructor.byPageForTitle(pageNum, title);
     fetchReposByQueryRequest(query);
   };
 
@@ -67,14 +71,19 @@ const MainPage = ({ repos, fetchReposByQueryRequest }) => {
                   inputProps={{ "aria-label": "search" }}
                 />
               </div>
-              <Button variant="contained" type="submit">
-                Send
-              </Button>
             </form>
           </Toolbar>
         </AppBar>
       </div>
-      <Paginator />
+      {repos.pagination.total && (
+        <Pagination
+          count={repos.pagination.total}
+          onChange={handlePaginationChange}
+          showFirstButton
+          showLastButton
+        />
+      )}
+
       <table>
         <tbody>{tableRows}</tbody>
       </table>

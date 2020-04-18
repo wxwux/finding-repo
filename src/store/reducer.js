@@ -6,7 +6,7 @@ const initialState = {
   pending: false,
   error: false,
   data: [],
-  pagination: []
+  pagination: {}
 };
 
 const rootReducer = handleActions(
