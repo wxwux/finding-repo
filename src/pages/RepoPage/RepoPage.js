@@ -21,24 +21,18 @@ const RepoPage = ({ fetchSingleRepoRequest, repo }) => {
     });
   }, [fetchSingleRepoRequest, owner, title]);
 
-  if (pending) {
-    return "loading";
-  }
+  if (pending) return <p>loading</p>;
 
-  if (!data) {
-    return "no data";
-  } else {
-    return (
-      <Grid container spacing={3}>
-        <Grid item xs={6}>
-          <UserInfo user={data.owner} />;
-        </Grid>
-        <Grid item xs={6}>
-          <RepoInfo repo={data} />
-        </Grid>
+  return (
+    <Grid container spacing={3}>
+      <Grid item xs={6}>
+        <UserInfo user={data.owner} />;
       </Grid>
-    );
-  }
+      <Grid item xs={6}>
+        <RepoInfo repo={data} />
+      </Grid>
+    </Grid>
+  );
 };
 
 const mapDispatchToProps = { fetchSingleRepoRequest };

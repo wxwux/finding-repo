@@ -1,9 +1,17 @@
 import React from "react";
 import Readme from "../Readme"
+import { getRelativeDate } from "../../helpers/date";
 
 const RepoInfo = ({ repo }) => {
+  const relativeDate = date => {
+    return getRelativeDate(new Date(date));
+  }
+
   return (
     <>
+      <h1>{repo.name}</h1>
+      <h4>last changed: {relativeDate(repo["pushed_at"])}</h4>
+      <h2>{repo.description}</h2>
       <table>
         <tbody>
           <tr>
