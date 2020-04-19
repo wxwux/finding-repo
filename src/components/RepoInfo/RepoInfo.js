@@ -1,6 +1,6 @@
 import React from "react";
 import Readme from "../Readme"
-import { getRelativeDate } from "../../helpers/date";
+import { getRelativeDate } from "../../helpers/dateTime";
 
 const RepoInfo = ({ repo }) => {
   const relativeDate = date => {

@@ -13,7 +13,9 @@ const localeStr = getLang();
 if (localeStr !== "en") {
   try {
     require(`moment/locale/${localeStr}`);
-  } catch (e) {}
+  } catch (e) {
+    console.log("loaded moment locale by default")
+  }
 }
 
 moment.locale(localeStr);
