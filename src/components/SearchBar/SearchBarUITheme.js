@@ -37,6 +37,15 @@ const useStyles = makeStyles((theme) => ({
       width: "20ch",
     },
   },
+
+  time: {
+    display: "flex",
+    alignItems: "center",
+    marginLeft: "auto",
+  },
+  timeAmount: {
+    marginLeft: theme.spacing(1),
+  },
 }));
 
 export default useStyles;

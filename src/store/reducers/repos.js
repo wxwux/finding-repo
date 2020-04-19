@@ -14,7 +14,6 @@ const initialState = {
 const repoReducer = handleActions(
   {
     [fetchReposByQuerySuccess]: (state, action) => {
-      console.log('action', action);
       return {
         pending: false,
         error: false,

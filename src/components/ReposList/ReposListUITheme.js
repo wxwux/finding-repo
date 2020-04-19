@@ -3,15 +3,9 @@ import { makeStyles } from "@material-ui/core/styles";
 const useStyles = makeStyles((theme) => {
   console.log(theme);
   return {
-    list: {
-      listStyle: "none",
-      padding: 0,
-    },
-    item: {
-      marginBottom: theme.spacing(2),
-    },
     link: {
       textDecoration: "none",
+      display: "block"
     },
     card: {
       textDecoration: "none",

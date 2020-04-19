@@ -1,22 +1,30 @@
 import React from "react";
-import { connect } from "react-redux";
 
-const SearchHistoryItem = ({ title }) => {
-  return <button>{title}</button>;
-};
+import Fab from "@material-ui/core/Fab";
 
-const SearchHistory = ({ searchHistory }) => {
-  const historyItems = searchHistory.map((item) => (
-    <SearchHistoryItem key={item} title={item}></SearchHistoryItem>
+import useStyles from "./SearchHistoryUITheme";
+
+const SearchHistory = ({ searchHistory, findRepoByTitle }) => {
+  const classes = useStyles();
+
+  const historyItems = searchHistory.map((title) => (
+    <Fab
+      key={title}
+      size="small"
+      variant="extended"
+      color="secondary"
+      aria-label={title}
+      className={classes.item}
+      onClick={() => findRepoByTitle(title)}
+    >
+      {title}
+    </Fab>
   ));
   return (
-    <>
-      <h3>Previous searches:</h3>
+    <div className={classes.container}>
       <div>{historyItems}</div>
-    </>
+    </div>
   );
 };
 
-const mapStateToProps = ({ searchHistory }) => ({ searchHistory });
-
-export default connect(mapStateToProps)(SearchHistory);
+export default SearchHistory;

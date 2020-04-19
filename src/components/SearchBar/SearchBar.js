@@ -1,13 +1,19 @@
 import React, { useState } from "react";
 
+import { convertMsToHumanFormat } from "../../helpers/dateTime";
+
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import InputBase from "@material-ui/core/InputBase";
+import Badge from "@material-ui/core/Badge";
+
+import GitHubIcon from "@material-ui/icons/GitHub";
 import SearchIcon from "@material-ui/icons/Search";
+import TimelapseIcon from "@material-ui/icons/Timelapse";
 
 import useStyles from "./SearchBarUITheme";
 
-const SearchBar = ({ findRepoByTitle }) => {
+const SearchBar = ({ findRepoByTitle, reposNumber, responseTime }) => {
   const [title, setTitle] = useState("");
   const classes = useStyles();
 
@@ -17,7 +23,8 @@ const SearchBar = ({ findRepoByTitle }) => {
 
   const sendRequest = (e) => {
     e.preventDefault();
-    findRepoByTitle(title, setTitle);
+    findRepoByTitle(title);
+    setTitle("");
   };
 
   return (
@@ -40,6 +47,17 @@ const SearchBar = ({ findRepoByTitle }) => {
             />
           </div>
         </form>
+        {reposNumber > 0 && (
+          <Badge badgeContent={reposNumber} max={10000} color="primary">
+            <GitHubIcon />
+          </Badge>
+        )}
+        {responseTime > 0 && (
+          <div className={classes.time}>
+            <TimelapseIcon />
+            <div className={classes.timeAmount}>{convertMsToHumanFormat(responseTime)}</div>
+          </div>
+        )}
       </Toolbar>
     </AppBar>
   );
