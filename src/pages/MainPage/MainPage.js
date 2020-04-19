@@ -8,10 +8,10 @@ import {
 } from "../../store/actions";
 import { queryConstructor } from "../../helpers/queries";
 import { lastSearchSelector } from "../../store/selectors";
+import { convertMsToHumanFormat } from "../../helpers/dateTime";
 
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
 import InputBase from "@material-ui/core/InputBase";
 import SearchIcon from "@material-ui/icons/Search";
 import Pagination from "@material-ui/lab/Pagination";
@@ -24,7 +24,7 @@ const MainPage = ({
   repos,
   fetchReposByQueryRequest,
   addSearchHistoryItem,
-  lastSearchedItem
+  lastSearchedItem,
 }) => {
   const [title, setTitle] = useState("");
   const classes = useStyles();
@@ -70,35 +70,32 @@ const MainPage = ({
 
   return (
     <div className="app-container">
-      <div>
-        <AppBar position="static">
-          <Toolbar>
-            <Typography className={classes.title} variant="h6" noWrap>
-              FINDING REPO
-            </Typography>
-            <form onSubmit={sendRequest} className={classes.form}>
-              <div className={classes.search}>
-                <div className={classes.searchIcon}>
-                  <SearchIcon />
-                </div>
-                <InputBase
-                  placeholder="Enter the name"
-                  classes={{
-                    root: classes.inputRoot,
-                    input: classes.inputInput,
-                  }}
-                  value={title}
-                  onChange={handleChange}
-                  inputProps={{ "aria-label": "search" }}
-                />
+      <AppBar position="static">
+        <Toolbar>
+          <form onSubmit={sendRequest} className={classes.form}>
+            <div className={classes.search}>
+              <div className={classes.searchIcon}>
+                <SearchIcon />
               </div>
-            </form>
-          </Toolbar>
-        </AppBar>
-      </div>
+              <InputBase
+                placeholder="Enter the name"
+                classes={{
+                  root: classes.inputRoot,
+                  input: classes.inputInput,
+                }}
+                value={title}
+                onChange={handleChange}
+                inputProps={{ "aria-label": "search" }}
+              />
+            </div>
+          </form>
+        </Toolbar>
+      </AppBar>
       <div>
         <div>Repos has been found: {repos.total}</div>
-        <div>Last request took: {repos.responseTime}</div>
+        <div>
+          Last request took: {convertMsToHumanFormat(repos.responseTime)}
+        </div>
       </div>
       {repos.pagination.total && (
         <Pagination

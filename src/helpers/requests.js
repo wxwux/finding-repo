@@ -16,7 +16,10 @@ export const withResponseTimeMeasures = (axiosInstance) => {
     (response) => {
       endTime = performance.now();
 
-      response.responseTime = endTime - startTime;
+      const responseTime = endTime - startTime;
+
+      response.responseTime = responseTime;
+
       return response;
     },
     (error) => {
