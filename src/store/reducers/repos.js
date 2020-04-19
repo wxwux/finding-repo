@@ -6,17 +6,24 @@ const initialState = {
   pending: false,
   error: false,
   data: [],
-  pagination: {}
+  responseTime: 0,
+  total: 0,
+  pagination: {},
 };
 
 const repoReducer = handleActions(
   {
-    [fetchReposByQuerySuccess]: (state, action) => ({
-      pending: false,
-      error: false,
-      data: action.payload.data,
-      pagination: action.payload.pagination
-    }),
+    [fetchReposByQuerySuccess]: (state, action) => {
+      console.log('action', action);
+      return {
+        pending: false,
+        error: false,
+        responseTime: action.payload.responseTime,
+        total: action.payload.total,
+        data: action.payload.data,
+        pagination: action.payload.pagination,
+      };
+    },
   },
   initialState
 );

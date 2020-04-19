@@ -96,6 +96,10 @@ const MainPage = ({
           </Toolbar>
         </AppBar>
       </div>
+      <div>
+        <div>Repos has been found: {repos.total}</div>
+        <div>Last request took: {repos.responseTime}</div>
+      </div>
       {repos.pagination.total && (
         <Pagination
           count={repos.pagination.total}

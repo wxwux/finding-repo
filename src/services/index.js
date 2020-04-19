@@ -1,13 +1,11 @@
 import $axios from "../requests";
 
 export const fetchReposByQuery = async (query) => {
-  const result = await $axios.get(`/search/repositories${query}`);
-  return result;
+  return await $axios.get(`/search/repositories${query}`);
 };
 
 export const fetchRepoByOwnerAndTitle = async (owner, title) => {
-  const result = await $axios.get(`/repos/${owner}/${title}`);
-  return result;
+  return await $axios.get(`/repos/${owner}/${title}`);
 };
 
 export const fetchDetailsByOwnerAndTitle = async (
@@ -16,6 +14,5 @@ export const fetchDetailsByOwnerAndTitle = async (
   detailsCategory
 ) => {
   const modifier = detailsCategory ? `/${detailsCategory}` : "";
-  const result = await $axios.get(`/repos/${owner}/${title}${modifier}`);
-  return result;
+  return await $axios.get(`/repos/${owner}/${title}${modifier}`);
 };

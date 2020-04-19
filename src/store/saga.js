@@ -16,10 +16,14 @@ const repos = function* () {
     try {
       const result = yield call(reposService.fetchReposByQuery, query);
       const pagination = new Pagination(result.headers.link);
+      console.log(result);
+      
       yield put(
         fetchReposByQuerySuccess({
           data: result.data.items,
           pagination: pagination.generate(),
+          total: result.data["total_count"],
+          responseTime: result.responseTime
         })
       );
     } catch (error) {
