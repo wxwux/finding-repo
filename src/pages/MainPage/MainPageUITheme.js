@@ -1,5 +1,5 @@
 import { fade, makeStyles } from "@material-ui/core/styles";
- 
+
 const useStyles = makeStyles((theme) => ({
   search: {
     position: "relative",
@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: theme.spacing(3),
   },
   form: {
-    display: "flex"
+    display: "flex",
   },
   searchIcon: {
     padding: theme.spacing(0, 2),
@@ -36,6 +36,10 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.up("md")]: {
       width: "20ch",
     },
+  },
+
+  listContainer: {
+    
   },
 }));
 

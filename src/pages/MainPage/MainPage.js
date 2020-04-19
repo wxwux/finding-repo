@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import React from "react";
 import { connect } from "react-redux";
-import { Link } from "react-router-dom";
 
 import {
   fetchReposByQueryRequest,
@@ -10,15 +9,13 @@ import { queryConstructor } from "../../helpers/queries";
 import { lastSearchSelector } from "../../store/selectors";
 import { convertMsToHumanFormat } from "../../helpers/dateTime";
 
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import InputBase from "@material-ui/core/InputBase";
-import SearchIcon from "@material-ui/icons/Search";
+import SearchBar from "../../components/SearchBar";
 import Pagination from "@material-ui/lab/Pagination";
+import Container from "@material-ui/core/Container";
+import ReposList from "../../components/ReposList";
 import SearchHistory from "../../components/SearchHistory";
 
 import "./MainPage.css";
-import useStyles from "./MainPageUITheme";
 
 const MainPage = ({
   repos,
@@ -26,15 +23,12 @@ const MainPage = ({
   addSearchHistoryItem,
   lastSearchedItem,
 }) => {
-  const [title, setTitle] = useState("");
-  const classes = useStyles();
-
-  const handleChange = (e) => {
-    setTitle(e.target.value);
+  const handlePaginationChange = (e, pageNum) => {
+    const query = queryConstructor.byPageForTitle(pageNum, lastSearchedItem);
+    fetchReposByQueryRequest(query);
   };
 
-  const sendRequest = (e) => {
-    e.preventDefault();
+  const findRepoByTitle = (title, setTitle) => {
     const wasSearchedLately = title === lastSearchedItem;
 
     if (wasSearchedLately) {
@@ -47,55 +41,21 @@ const MainPage = ({
 
     addSearchHistoryItem(title);
     setTitle("");
-  };
-
-  const handlePaginationChange = (e, pageNum) => {
-    const query = queryConstructor.byPageForTitle(pageNum, lastSearchedItem);
-    fetchReposByQueryRequest(query);
-  };
-
-  const tableRows = repos.data.map((repo) => {
-    return (
-      <tr key={repo.id}>
-        <td>{repo.name}</td>
-        <td>
-          <img src={repo.owner["avatar_url"]} width="100" alt="avatar" />
-        </td>
-        <td>
-          <Link to={repo["full_name"]}>Details</Link>
-        </td>
-      </tr>
-    );
-  });
+  }
 
   return (
-    <div className="app-container">
-      <AppBar position="static">
-        <Toolbar>
-          <form onSubmit={sendRequest} className={classes.form}>
-            <div className={classes.search}>
-              <div className={classes.searchIcon}>
-                <SearchIcon />
-              </div>
-              <InputBase
-                placeholder="Enter the name"
-                classes={{
-                  root: classes.inputRoot,
-                  input: classes.inputInput,
-                }}
-                value={title}
-                onChange={handleChange}
-                inputProps={{ "aria-label": "search" }}
-              />
-            </div>
-          </form>
-        </Toolbar>
-      </AppBar>
+    <Container maxWidth="sm">
+      <SearchBar findRepoByTitle={findRepoByTitle} />
       <div>
         <div>Repos has been found: {repos.total}</div>
         <div>
           Last request took: {convertMsToHumanFormat(repos.responseTime)}
         </div>
+      </div>
+
+      <SearchHistory />
+      <div>
+        <ReposList repos={repos} />
       </div>
       {repos.pagination.total && (
         <Pagination
@@ -105,12 +65,7 @@ const MainPage = ({
           showLastButton
         />
       )}
-
-      <SearchHistory />
-      <table>
-        <tbody>{tableRows}</tbody>
-      </table>
-    </div>
+    </Container>
   );
 };
 
