@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { fetchReadmeRequest } from "../../store/actions";
 import { useParams } from "react-router-dom";
+import Truncate from "react-truncate-html";
 
 import { decodeToUnicode } from "../../helpers/base64";
 import MarkdownIt from "markdown-it";
@@ -14,15 +15,24 @@ const Readme = ({ fetchReadmeRequest, readme }) => {
     fetchReadmeRequest({ owner, title });
   }, [fetchReadmeRequest, owner, title]);
 
-
   if (!data) {
     return "no data";
   } else {
     const content = decodeToUnicode(data.content);
-    const markdown = new MarkdownIt();
+    const markdown = new MarkdownIt({
+      html: true,
+    });
     const markup = markdown.render(content);
 
-    return <div dangerouslySetInnerHTML={{ __html: markup }} />;
+    return (
+      <Truncate
+        lines={30}
+        ellipsis={"<span>read more</span>"}
+        dangerouslySetInnerHTML={{
+          __html: markup,
+        }}
+      />
+    );
   }
 };
 
