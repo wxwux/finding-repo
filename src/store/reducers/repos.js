@@ -1,10 +1,14 @@
 import { handleActions } from "redux-actions";
 
-import { fetchReposByQuerySuccess } from "../actions";
+import {
+  fetchReposByQuerySuccess,
+  fetchReposByQueryRequest,
+  fetchReposByQueryFailure,
+} from "../actions";
 
 const initialState = {
   pending: false,
-  error: false,
+  error: null,
   data: [],
   responseTime: 0,
   total: 0,
@@ -13,14 +17,31 @@ const initialState = {
 
 const repoReducer = handleActions(
   {
+    [fetchReposByQueryRequest]: (state, action) => {
+      return {
+        ...state,
+        pending: true,
+        error: null
+      };
+    },
     [fetchReposByQuerySuccess]: (state, action) => {
       return {
         pending: false,
         error: false,
+        error: null,
         responseTime: action.payload.responseTime,
         total: action.payload.total,
         data: action.payload.data,
         pagination: action.payload.pagination,
+      };
+    },
+    [fetchReposByQueryFailure]: (state, action) => {
+      console.log("fetchReposByQueryFailure");
+
+      return {
+        ...state,
+        pending: false,
+        error: action.payload,
       };
     },
   },
