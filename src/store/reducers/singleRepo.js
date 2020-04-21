@@ -11,14 +11,15 @@ const singleRepoReducer = handleActions(
   {
     [fetchSingleRepoRequest]: (state, action) => ({
       ...state,
-      pending: true
+      pending: true,
     }),
     [fetchSingleRepoSuccess]: (state, action) => ({
       ...state,
       pending: false,
-      data: action.payload
-    })
-  }, initialState
+      data: action.payload,
+    }),
+  },
+  initialState
 );
 
 export default singleRepoReducer;

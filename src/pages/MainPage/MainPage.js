@@ -55,13 +55,15 @@ const MainPage = ({
       />
       {searchHistory.length > 0 && (
         <SearchHistory
-          searchHistory={searchHistory} 
+          searchHistory={searchHistory}
           findRepoByTitle={findRepoByTitle}
         />
       )}
-      <Paper square className={classes.listContainer}>
-        <ReposList repos={repos} />
-      </Paper>
+      {repos.data.length > 0 && (
+        <Paper square className={classes.listContainer}>
+          <ReposList repos={repos.data} />
+        </Paper>
+      )}
       {repos.pagination.total && (
         <div className={classes.paginationContainer}>
           <Pagination

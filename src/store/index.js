@@ -11,7 +11,7 @@ const composeStore = () => {
 
   const store = createStore(
     rootReducer,
-    composeEnhancers(applyMiddleware(logger, sagaMiddleware))
+    composeEnhancers(applyMiddleware(sagaMiddleware, logger))
   );
   sagaMiddleware.run(rootSaga);
 
