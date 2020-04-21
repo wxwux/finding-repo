@@ -20,7 +20,7 @@ export const generateErrorObject = (error) => {
       return new ErrorObject("Entered the wrong value", status);
     case 523:
       return new ErrorObject(
-        "You've reached requests limits of Github API",
+        "You've reached requests limit of Github API",
         status
       );
     case 404:
