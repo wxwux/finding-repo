@@ -1,38 +1,55 @@
 import React from "react";
-import Readme from "../Readme"
 import { getRelativeDate } from "../../helpers/dateTime";
 
+import Readme from "../Readme";
+import Stats from "../Stats";
+
+import Typography from "@material-ui/core/Typography";
+import Divider from "@material-ui/core/Divider";
+import Card from "@material-ui/core/Card";
+import CardContent from "@material-ui/core/CardContent";
+
+import useStyles from "./RepoInfoUITheme";
+
 const RepoInfo = ({ repo }) => {
-  const relativeDate = date => {
+  const classes = useStyles();
+
+  const relativeDate = (date) => {
     return getRelativeDate(new Date(date));
-  }
+  };
 
   return (
     <>
-      <h1>{repo.name}</h1>
-      <h4>last changed: {relativeDate(repo["pushed_at"])}</h4>
-      <h2>{repo.description}</h2>
-      <table>
-        <tbody>
-          <tr>
-            <td>forks: </td>
-            <td>{repo.forks}</td>
-          </tr>
-          <tr>
-            <td>issues: </td>
-            <td>{repo["open_issues"]}</td>
-          </tr>
-          <tr>
-            <td>watchers: </td>
-            <td>{repo["subscribers_count"]}</td>
-          </tr>
-          <tr>
-            <td>stars: </td>
-            <td>{repo["stargazers_count"]}</td>
-          </tr>
-        </tbody>
-      </table>
-      <Readme />
+      <Stats
+        forks={repo.forks}
+        issues={repo["open_issues"]}
+        subscribers={repo["subscribers_count"]}
+        stars={repo["stargazers_count"]}
+      />
+      <Typography variant="h2" component="h1" className={classes.title}>
+        {repo.name}
+      </Typography>
+      <Typography variant="h6" component="h6" className={classes.changed}>
+        last changed: {relativeDate(repo["pushed_at"])}
+      </Typography>
+
+      { repo.description && repo.description.length > 0 && (
+        <>
+          <Divider className={classes.divider} />
+          <Typography
+            variant="h5"
+            className={classes.description}
+            component="h3"
+          >
+            {repo.description}
+          </Typography>
+        </>
+      )}
+      <Card>
+        <CardContent>
+          <Readme />
+        </CardContent>
+      </Card>
     </>
   );
 };
