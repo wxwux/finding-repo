@@ -15,6 +15,8 @@ import Paper from "@material-ui/core/Paper";
 import ReposList from "../../components/ReposList";
 import SearchHistory from "../../components/SearchHistory";
 
+import { useSnackbar } from "notistack";
+
 import useStyles from "./MainPageUITheme";
 
 const MainPage = ({
@@ -25,6 +27,7 @@ const MainPage = ({
   searchHistory,
 }) => {
   const classes = useStyles();
+  const { enqueueSnackbar } = useSnackbar();
 
   const handlePaginationChange = (e, pageNum) => {
     const query = queryConstructor.byPageForTitle(pageNum, lastSearchedItem);
@@ -32,19 +35,14 @@ const MainPage = ({
   };
 
   const findRepoByTitle = (title) => {
-    // const wasSearchedLately = title === lastSearchedItem;
-
-    // if (wasSearchedLately) {
-    //   setTitle("");
-    //   return;
-    // }
-
     const query = queryConstructor.byTitle(title);
     fetchReposByQueryRequest(query);
-
     addSearchHistoryItem(title);
-    // setTitle("");
   };
+
+  if (Boolean(repos.error)) {
+    enqueueSnackbar(repos.error.message, { variant: "error" });
+  }
 
   return (
     <Container maxWidth="sm" className={classes.rootContainer}>
@@ -52,6 +50,7 @@ const MainPage = ({
         findRepoByTitle={findRepoByTitle}
         reposNumber={repos.total}
         responseTime={repos.responseTime}
+        pending={repos.pending}
       />
       {searchHistory.length > 0 && (
         <SearchHistory

@@ -8,9 +8,13 @@ const useStyles = makeStyles((theme) => ({
     "&:hover": {
       backgroundColor: fade(theme.palette.common.white, 0.25),
     },
+    border: "1px solid transparent",
     marginRight: theme.spacing(2),
     width: "100%",
     marginLeft: theme.spacing(3),
+  },
+  error: {
+    borderColor: theme.palette.error.main,
   },
   form: {
     display: "flex",
@@ -45,6 +49,25 @@ const useStyles = makeStyles((theme) => ({
   },
   timeAmount: {
     marginLeft: theme.spacing(1),
+  },
+  progress: {
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    right: 0,
+  },
+  blocked: {
+    position: "relative",
+    pointerEvents: "none",
+    "&:after": {
+      content: '""',
+      position: "absolute",
+      top: 0,
+      left: 0,
+      bottom: 0,
+      right: 0,
+      background: theme.palette.action.disabled,
+    },
   },
 }));
 
