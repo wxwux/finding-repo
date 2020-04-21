@@ -11,9 +11,9 @@ const Readme = ({ fetchReadmeRequest, readme }) => {
   const { owner, title } = useParams();
   const { data } = readme;
 
-  useEffect(() => {
-    fetchReadmeRequest({ owner, title });
-  }, [fetchReadmeRequest, owner, title]);
+  // useEffect(() => {
+  //   fetchReadmeRequest({ owner, title });
+  // }, [fetchReadmeRequest, owner, title]);
 
   if (!data) {
     return "no data";

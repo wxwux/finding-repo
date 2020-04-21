@@ -1,33 +1,43 @@
-import { takeEvery, call, put, fork } from "redux-saga/effects";
+import {
+  takeEvery,
+  takeLatest,
+  call,
+  put,
+  fork,
+  take,
+  all,
+} from "redux-saga/effects";
 import {
   fetchReposByQueryRequest,
   fetchReposByQuerySuccess,
+  fetchReposByQueryFailure,
   fetchSingleRepoSuccess,
   fetchSingleRepoRequest,
+  fetchSingleRepoFailure,
   fetchReadmeRequest,
-  fetchReadmeSuccess
+  fetchReadmeSuccess,
 } from "./actions";
 import { Pagination } from "../helpers/pagination";
+import { generateErrorObject } from "../helpers/errors";
 
 import * as reposService from "../services";
 
 const repos = function* () {
-  yield takeEvery(fetchReposByQueryRequest, function* ({ payload: query }) {
+  yield takeLatest(fetchReposByQueryRequest, function* ({ payload: query }) {
     try {
       const result = yield call(reposService.fetchReposByQuery, query);
       const pagination = new Pagination(result.headers.link);
-      console.log(result);
-      
       yield put(
         fetchReposByQuerySuccess({
           data: result.data.items,
           pagination: pagination.generate(),
           total: result.data["total_count"],
-          responseTime: result.responseTime
+          responseTime: result.responseTime,
         })
       );
     } catch (error) {
-      yield console.log(error);
+      const errorObject = generateErrorObject(error);
+      yield put(fetchReposByQueryFailure(errorObject));
     }
   });
 };
@@ -35,38 +45,61 @@ const repos = function* () {
 const singleRepo = function* () {
   yield takeEvery(fetchSingleRepoRequest, function* ({ payload: repoInfo }) {
     try {
-      const result = yield call(
-        reposService.fetchRepoByOwnerAndTitle,
-        repoInfo.owner,
-        repoInfo.title
-      );
-      yield put(fetchSingleRepoSuccess(result.data));
+      const { owner, title } = repoInfo;
+
+      const [repo, readme] = yield all([
+        call(reposService.fetchRepoByOwnerAndTitle, owner, title),
+        call(reposService.fetchDetailsByOwnerAndTitle, owner, title, "readme"),
+      ]);
+
+      // console.log("owner, title", repo, readme);
+
+      yield put(fetchSingleRepoSuccess(repo.data));
+      yield put(fetchReadmeSuccess(readme.data));
+      // yield
+      // yield put(
+      //   fetchReadmeRequest({
+      //     owner: repoInfo.owner,
+      //     title: repoInfo.title,
+      //   })
+      // );
     } catch (error) {
-      yield console.log(error);
+      const errorObject = generateErrorObject(error);
+      yield put(fetchSingleRepoFailure(errorObject));
     }
   });
 };
 
+// const readme = function* () {
+//   try {
+//     const { repoInfo } = yield take(fetchReadmeRequest);
+//     const result = yield call(
+//       reposService.fetchDetailsByOwnerAndTitle,
+//       repoInfo.owner,
+//       repoInfo.title,
+//       "readme"
+//     );
+//     yield put(fetchReadmeSuccess(result.data));
+//   } catch (error) {
+//     console.log(error);
+//   }
 
-const readme = function* () {
-  yield takeEvery(fetchReadmeRequest, function* ({ payload: repoInfo }) {
-    try {
-      const result = yield call(
-        reposService.fetchDetailsByOwnerAndTitle,
-        repoInfo.owner,
-        repoInfo.title,
-        "readme"
-      );
-      yield put(fetchReadmeSuccess(result.data));
-    } catch (error) {
-      yield console.log(error);
-    }
-  });
-};
-
+//   // yield takeEvery(fetchReadmeRequest, function* ({ payload: repoInfo }) {
+//   //   try {
+//   //     const result = yield call(
+//   //       reposService.fetchDetailsByOwnerAndTitle,
+//   //       repoInfo.owner,
+//   //       repoInfo.title,
+//   //       "readme"
+//   //     );
+//   //     yield put(fetchReadmeSuccess(result.data));
+//   //   } catch (error) {
+//   //     yield console.log(error);
+//   //   }
+//   // });
+// };
 
 export default function* rootSaga() {
   yield fork(repos);
   yield fork(singleRepo);
-  yield fork(readme);
 }
