@@ -7,10 +7,13 @@ import UserInfo from "../../components/UserInfo";
 import RepoInfo from "../../components/RepoInfo";
 
 import Grid from "@material-ui/core/Grid";
+import Container from "@material-ui/core/Container";
+import useStyles from "./RepoPageUITheme";
 
 const RepoPage = ({ fetchSingleRepoRequest, repo }) => {
   const { owner, title } = useParams();
   const { pending, error, data } = repo;
+  const classes = useStyles();
 
   useEffect(() => {
     console.log("effect works");
@@ -24,14 +27,16 @@ const RepoPage = ({ fetchSingleRepoRequest, repo }) => {
   if (pending) return <p>loading</p>;
 
   return (
-    <Grid container spacing={3}>
-      <Grid item xs={6}>
-        <UserInfo user={data.owner} />;
+    <Container maxWidth="md" className={classes.container}>
+      <Grid container spacing={3}>
+        <Grid item xs={4}>
+          <UserInfo user={data.owner} />
+        </Grid>
+        <Grid item xs={8}>
+          <RepoInfo repo={data} />
+        </Grid>
       </Grid>
-      <Grid item xs={6}>
-        <RepoInfo repo={data} />
-      </Grid>
-    </Grid>
+    </Container>
   );
 };
 
