@@ -12,7 +12,7 @@ import useStyles from "./ReposListUITheme";
 const ReposList = ({ repos }) => {
   const classes = useStyles();
 
-  const tableRows = repos.map((repo) => {
+  const Items = repos.map((repo) => {
     return (
       <ListItem button key={repo.id}>
         <NavLink className={classes.link} to={repo["full_name"]}>
@@ -32,8 +32,11 @@ const ReposList = ({ repos }) => {
       </ListItem>
     );
   });
+  
+  console.log("length", repos.length);
+  
 
-  return <List> {tableRows} </List>;
+  return <List> {Items} </List>;
 };
 
 export default ReposList;
