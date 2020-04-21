@@ -33,9 +33,6 @@ const ReposList = ({ repos }) => {
     );
   });
   
-  console.log("length", repos.length);
-  
-
   return <List> {Items} </List>;
 };
 

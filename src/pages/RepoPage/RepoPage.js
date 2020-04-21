@@ -28,10 +28,10 @@ const RepoPage = ({ fetchSingleRepoRequest, repo }) => {
   if (pending) return <p>loading</p>;
 
   if (error && error.status === 404) {
-    
     return <Redirect to="/404" />
   }
 
+  // return "owner"
   return (
     <Container maxWidth="md" className={classes.container}>
       <Grid container spacing={3}>

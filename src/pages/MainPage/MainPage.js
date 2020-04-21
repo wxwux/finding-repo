@@ -36,6 +36,7 @@ const MainPage = ({
 
   const findRepoByTitle = (title) => {
     const query = queryConstructor.byTitle(title);
+
     fetchReposByQueryRequest(query);
     addSearchHistoryItem(title);
   };
@@ -46,12 +47,7 @@ const MainPage = ({
 
   return (
     <Container maxWidth="sm" className={classes.rootContainer}>
-      <SearchBar
-        findRepoByTitle={findRepoByTitle}
-        reposNumber={repos.total}
-        responseTime={repos.responseTime}
-        pending={repos.pending}
-      />
+      <SearchBar findRepoByTitle={findRepoByTitle} repos={repos} />
       {searchHistory.length > 0 && (
         <SearchHistory
           searchHistory={searchHistory}

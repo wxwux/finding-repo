@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useSnackbar } from "notistack";
+import { debonce } from "../../helpers/debouncer";
 
 import { convertMsToHumanFormat } from "../../helpers/dateTime";
 
@@ -15,39 +16,52 @@ import TimelapseIcon from "@material-ui/icons/Timelapse";
 
 import useStyles from "./SearchBarUITheme";
 
-const SearchBar = ({ findRepoByTitle, reposNumber, responseTime, pending }) => {
+const SearchBar = ({ findRepoByTitle, repos }) => {
+  const classes = useStyles();
   const [title, setTitle] = useState("");
   const [hasError, setHasError] = useState(false);
+  const [deboncer, setDeboncer] = useState();
   const { enqueueSnackbar } = useSnackbar();
 
-  const classes = useStyles();
+  const deboncedFunction = (fn, ms) => {
+    if (typeof deboncer !== "undefined") {
+      clearTimeout(deboncer);
+    }
+
+    setDeboncer(setTimeout(() => {
+      fn()
+    }, ms));
+  };
 
   const handleChange = (e) => {
     setTitle(e.target.value);
+    deboncedFunction(() => {
+      sendRequest(e);
+    }, 1000);
   };
 
   const sendRequest = (e) => {
     e.preventDefault();
+
     const pureTitle = title.trim();
 
     if (!pureTitle) {
       setHasError(true);
       setTitle("");
-      enqueueSnackbar("We can't find nothing", {variant: 'error'});
+      enqueueSnackbar("We can't find nothing", { variant: "error" });
       return;
     }
 
     setHasError(false);
     findRepoByTitle(pureTitle);
-    setTitle("");
   };
 
   return (
     <AppBar
       position="relative"
-      className={`${classes.container} ${pending ? classes.blocked : ""}`}
+      className={`${classes.container} ${repos.pending ? classes.blocked : ""}`}
     >
-      {pending && (
+      {repos.pending && (
         <LinearProgress
           className={classes.progress}
           color="secondary"
@@ -71,16 +85,16 @@ const SearchBar = ({ findRepoByTitle, reposNumber, responseTime, pending }) => {
             />
           </div>
         </form>
-        {reposNumber > 0 && (
-          <Badge badgeContent={reposNumber} max={10000} color="primary">
+        {repos.total > 0 && (
+          <Badge badgeContent={repos.total} max={10000} color="primary">
             <GitHubIcon />
           </Badge>
         )}
-        {responseTime > 0 && (
+        {repos.responseTime > 0 && (
           <div className={classes.time}>
             <TimelapseIcon />
             <div className={classes.timeAmount}>
-              {convertMsToHumanFormat(responseTime)}
+              {convertMsToHumanFormat(repos.responseTime)}
             </div>
           </div>
         )}
