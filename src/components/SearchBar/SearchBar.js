@@ -104,6 +104,8 @@ class SearchBar extends React.Component {
                   root: classes.inputRoot,
                   input: classes.inputInput,
                 }}
+                disabled={repos.pending}
+                autoFocus={true}
                 value={title}
                 onInput={this.handleChange}
                 inputProps={{ "aria-label": "search" }}
