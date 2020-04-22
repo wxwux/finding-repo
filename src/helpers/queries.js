@@ -1,13 +1,22 @@
+const queryTypes = {
+  TITLE: "title",
+  PAGE: "page",
+};
 export const queryConstructor = {
   byTitle(title) {
-    return `?q=${title}`;
+    return {
+      type: queryTypes.TITLE,
+      originalValues: [title],
+      toString: () => `?q=${title}`,
+    };
   },
   byPageForTitle(page, title) {
-    return `?q=${title}&page=${page}`;
+    return {
+      type: queryTypes.PAGE,
+      originalValues: [page, title],
+      toString: () => `?q=${title}&page=${page}`,
+    };
   },
-  byOwnerAndTitle(owner, title) {
-    return `/${owner}/${title}`;
-  }
 };
 
 export const parseSearchQueryFromUrl = (url) => {
