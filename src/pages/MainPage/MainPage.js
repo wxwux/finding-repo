@@ -22,7 +22,6 @@ import useStyles from "./MainPageUITheme";
 const MainPage = ({
   repos,
   fetchReposByQueryRequest,
-  addSearchHistoryItem,
   lastSearchedItem,
   searchHistory,
 }) => {
@@ -36,9 +35,7 @@ const MainPage = ({
 
   const findRepoByTitle = (title) => {
     const query = queryConstructor.byTitle(title);
-
     fetchReposByQueryRequest(query);
-    addSearchHistoryItem(title);
   };
 
   if (Boolean(repos.error)) {

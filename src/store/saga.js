@@ -1,4 +1,4 @@
-import { takeEvery, takeLatest, call, put, fork } from "redux-saga/effects";
+import { takeLatest, take, call, put, fork } from "redux-saga/effects";
 import {
   fetchReposByQueryRequest,
   fetchReposByQuerySuccess,
@@ -9,31 +9,12 @@ import {
   fetchReadmeRequest,
   fetchReadmeSuccess,
   fetchReadmeFailure,
+  addSearchHistoryItem,
 } from "./actions";
 import { Pagination } from "../helpers/pagination";
 import { generateErrorObject } from "../helpers/errors";
 
 import * as reposService from "../services";
-
-const repos = function* () {
-  yield takeLatest(fetchReposByQueryRequest, function* ({ payload: query }) {
-    try {
-      const result = yield call(reposService.fetchReposByQuery, query);
-      const pagination = new Pagination(result.headers.link);
-      yield put(
-        fetchReposByQuerySuccess({
-          data: result.data.items,
-          pagination: pagination.generate(),
-          total: result.data["total_count"],
-          responseTime: result.responseTime,
-        })
-      );
-    } catch (error) {
-      const errorObject = generateErrorObject(error);
-      yield put(fetchReposByQueryFailure(errorObject));
-    }
-  });
-};
 
 const readme = function* (repoInfo) {
   const { owner, title } = repoInfo;
@@ -49,6 +30,40 @@ const readme = function* (repoInfo) {
     const errorObject = generateErrorObject(error);
     yield put(fetchReadmeFailure(errorObject));
   }
+};
+
+
+const searchHistory = function* (query) {
+  const [title] = query.originalValues;
+  yield put(addSearchHistoryItem(title));
+};
+
+const reposList = function* (query) {
+  try {
+    const result = yield call(reposService.fetchReposByQuery, query);
+    const pagination = new Pagination(result.headers.link);
+    yield put(
+      fetchReposByQuerySuccess({
+        data: result.data.items,
+        pagination: pagination.generate(),
+        total: result.data["total_count"],
+        responseTime: result.responseTime,
+      })
+    );
+    if (query.type === "title") {
+      yield call(searchHistory, query);
+    }
+  } catch (error) {
+    const errorObject = generateErrorObject(error);
+    yield put(fetchReposByQueryFailure(errorObject));
+  }
+};
+
+
+const repos = function* () {
+  yield takeLatest(fetchReposByQueryRequest, function* ({ payload: query }) {
+    yield call(reposList, query);
+  });
 };
 
 const singleRepoSaga = function* (repoInfo) {

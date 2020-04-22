@@ -77,6 +77,7 @@ class SearchBar extends React.Component {
   render() {
     const { classes, repos } = this.props;
     const { hasError, title } = this.state;
+
     return (
       <AppBar
         position="relative"
