@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useSnackbar } from "notistack";
-import { debonce } from "../../helpers/debouncer";
 
 import { convertMsToHumanFormat } from "../../helpers/dateTime";
 
@@ -28,21 +27,24 @@ const SearchBar = ({ findRepoByTitle, repos }) => {
       clearTimeout(deboncer);
     }
 
-    setDeboncer(setTimeout(() => {
-      fn()
-    }, ms));
+    setDeboncer(setTimeout(fn, ms));
   };
 
   const handleChange = (e) => {
     setTitle(e.target.value);
-    deboncedFunction(() => {
-      sendRequest(e);
-    }, 1000);
+    if (!title.trim()) return;
+    deboncedFunction(sendRequest, 1000);
   };
 
-  const sendRequest = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
+    if (typeof deboncer !== "undefined") {
+      clearTimeout(deboncer);
+    }
+    sendRequest();
+  };
 
+  const sendRequest = () => {
     const pureTitle = title.trim();
 
     if (!pureTitle) {
@@ -68,7 +70,7 @@ const SearchBar = ({ findRepoByTitle, repos }) => {
         ></LinearProgress>
       )}
       <Toolbar>
-        <form onSubmit={sendRequest} className={classes.form}>
+        <form onSubmit={handleSubmit} className={classes.form}>
           <div className={`${classes.search} ${hasError ? classes.error : ""}`}>
             <div className={classes.searchIcon}>
               <SearchIcon />
@@ -80,7 +82,7 @@ const SearchBar = ({ findRepoByTitle, repos }) => {
                 input: classes.inputInput,
               }}
               value={title}
-              onChange={handleChange}
+              onInput={handleChange}
               inputProps={{ "aria-label": "search" }}
             />
           </div>

@@ -4,7 +4,6 @@ import {
   call,
   put,
   fork,
-  take,
   all,
 } from "redux-saga/effects";
 import {
