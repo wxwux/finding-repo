@@ -1,39 +1,43 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { connect } from "react-redux";
 import { fetchReadmeRequest } from "../../store/actions";
-import { useParams } from "react-router-dom";
 import Truncate from "react-truncate-html";
 
 import { decodeToUnicode } from "../../helpers/base64";
 import MarkdownIt from "markdown-it";
 
-const Readme = ({ fetchReadmeRequest, readme }) => {
-  const { owner, title } = useParams();
-  const { data } = readme;
+import CircularProgress from "@material-ui/core/CircularProgress";
+import useStyles from "./ReadmeUITheme";
 
-  // useEffect(() => {
-  //   fetchReadmeRequest({ owner, title });
-  // }, [fetchReadmeRequest, owner, title]);
+const Readme = ({ readme }) => {
+  const { data, pending } = readme;
+  const classes = useStyles();
 
-  if (!data) {
-    return "no data";
-  } else {
-    const content = decodeToUnicode(data.content);
-    const markdown = new MarkdownIt({
-      html: true,
-    });
-    const markup = markdown.render(content);
-
+  if (pending) {
     return (
-      <Truncate
-        lines={30}
-        ellipsis={"<span>read more</span>"}
-        dangerouslySetInnerHTML={{
-          __html: markup,
-        }}
-      />
+      <div className={classes.loader}>
+        <CircularProgress />
+      </div>
     );
   }
+
+  if (!data) return "No readme was provided";
+
+  const content = decodeToUnicode(data.content);
+  const markdown = new MarkdownIt({
+    html: true,
+  });
+  const markup = markdown.render(content);
+
+  return (
+    <Truncate
+      lines={30}
+      ellipsis={"<span>read more</span>"}
+      dangerouslySetInnerHTML={{
+        __html: markup,
+      }}
+    />
+  );
 };
 
 const mapDispatchToProps = { fetchReadmeRequest };

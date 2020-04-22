@@ -2,7 +2,7 @@ import { handleActions } from "redux-actions";
 import { fetchReadmeSuccess, fetchReadmeFailure } from "../actions";
 
 const initialState = {
-  pending: false,
+  pending: true,
   error: false,
   data: null,
 };
