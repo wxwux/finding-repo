@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
 import { fetchSingleRepoRequest } from "../../store/actions";
+import LinearProgress from "@material-ui/core/LinearProgress";
 
 import UserInfo from "../../components/UserInfo";
 import RepoInfo from "../../components/RepoInfo";
@@ -25,13 +26,14 @@ const RepoPage = ({ fetchSingleRepoRequest, repo }) => {
     });
   }, [fetchSingleRepoRequest, owner, title]);
 
-  if (pending) return <p>loading</p>;
-
-  if (error && error.status === 404) {
-    return <Redirect to="/404" />
+  if (pending) {
+    return <LinearProgress className={classes.loader} color="secondary" />;
   }
 
-  // return "owner"
+  if (error && error.status === 404) {
+    return <Redirect to="/404" />;
+  }
+
   return (
     <Container maxWidth="md" className={classes.container}>
       <Grid container spacing={3}>
