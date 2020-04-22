@@ -51,24 +51,27 @@ const readme = function* (repoInfo) {
   }
 };
 
-const singleRepo = function* () {
-  yield takeEvery(fetchSingleRepoRequest, function* ({ payload: repoInfo }) {
-    try {
-      const { owner, title } = repoInfo;
-      const result = yield call(
-        reposService.fetchRepoByOwnerAndTitle,
-        owner,
-        title
-      );
-      yield fork(readme, repoInfo);
-      yield put(fetchSingleRepoSuccess(result.data));
-    } catch (error) {
-      const errorObject = generateErrorObject(error);
-      yield put(fetchSingleRepoFailure(errorObject));
-    }
-  });
+const singleRepoSaga = function* (repoInfo) {
+  try {
+    const { owner, title } = repoInfo;
+    const result = yield call(
+      reposService.fetchRepoByOwnerAndTitle,
+      owner,
+      title
+    );
+    yield put(fetchSingleRepoSuccess(result.data));
+  } catch (error) {
+    const errorObject = generateErrorObject(error);
+    yield put(fetchSingleRepoFailure(errorObject));
+  }
 };
 
+const singleRepo = function* () {
+  yield takeLatest(fetchSingleRepoRequest, function* ({ payload: repoInfo }) {
+    yield fork(readme, repoInfo);
+    yield fork(singleRepoSaga, repoInfo);
+  });
+};
 
 export default function* rootSaga() {
   yield fork(repos);

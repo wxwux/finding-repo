@@ -1,5 +1,5 @@
 import { handleActions } from "redux-actions";
-import { fetchReadmeSuccess } from "../actions";
+import { fetchReadmeSuccess, fetchReadmeFailure } from "../actions";
 
 const initialState = {
   pending: false,
@@ -14,6 +14,11 @@ const readmeReducer = handleActions(
       error: false,
       data: action.payload,
     }),
+    [fetchReadmeFailure]: (state, action) => ({
+      pending: false,
+      error: action.payload,
+      data: null
+    })
   },
   initialState
 );
