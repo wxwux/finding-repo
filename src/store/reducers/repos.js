@@ -27,7 +27,6 @@ const repoReducer = handleActions(
     [fetchReposByQuerySuccess]: (state, action) => {
       return {
         pending: false,
-        error: false,
         error: null,
         responseTime: action.payload.responseTime,
         total: action.payload.total,
