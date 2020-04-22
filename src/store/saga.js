@@ -1,11 +1,4 @@
-import {
-  takeEvery,
-  takeLatest,
-  call,
-  put,
-  fork,
-  all,
-} from "redux-saga/effects";
+import { takeEvery, takeLatest, call, put, fork } from "redux-saga/effects";
 import {
   fetchReposByQueryRequest,
   fetchReposByQuerySuccess,
@@ -15,6 +8,7 @@ import {
   fetchSingleRepoFailure,
   fetchReadmeRequest,
   fetchReadmeSuccess,
+  fetchReadmeFailure,
 } from "./actions";
 import { Pagination } from "../helpers/pagination";
 import { generateErrorObject } from "../helpers/errors";
@@ -41,27 +35,33 @@ const repos = function* () {
   });
 };
 
+const readme = function* (repoInfo) {
+  const { owner, title } = repoInfo;
+  try {
+    const result = yield call(
+      reposService.fetchDetailsByOwnerAndTitle,
+      owner,
+      title,
+      "readme"
+    );
+    yield put(fetchReadmeSuccess(result.data));
+  } catch (error) {
+    const errorObject = generateErrorObject(error);
+    yield put(fetchReadmeFailure(errorObject));
+  }
+};
+
 const singleRepo = function* () {
   yield takeEvery(fetchSingleRepoRequest, function* ({ payload: repoInfo }) {
     try {
       const { owner, title } = repoInfo;
-
-      const [repo, readme] = yield all([
-        call(reposService.fetchRepoByOwnerAndTitle, owner, title),
-        call(reposService.fetchDetailsByOwnerAndTitle, owner, title, "readme"),
-      ]);
-
-      // console.log("owner, title", repo, readme);
-
-      yield put(fetchSingleRepoSuccess(repo.data));
-      yield put(fetchReadmeSuccess(readme.data));
-      // yield
-      // yield put(
-      //   fetchReadmeRequest({
-      //     owner: repoInfo.owner,
-      //     title: repoInfo.title,
-      //   })
-      // );
+      const result = yield call(
+        reposService.fetchRepoByOwnerAndTitle,
+        owner,
+        title
+      );
+      yield fork(readme, repoInfo);
+      yield put(fetchSingleRepoSuccess(result.data));
     } catch (error) {
       const errorObject = generateErrorObject(error);
       yield put(fetchSingleRepoFailure(errorObject));
@@ -69,34 +69,6 @@ const singleRepo = function* () {
   });
 };
 
-// const readme = function* () {
-//   try {
-//     const { repoInfo } = yield take(fetchReadmeRequest);
-//     const result = yield call(
-//       reposService.fetchDetailsByOwnerAndTitle,
-//       repoInfo.owner,
-//       repoInfo.title,
-//       "readme"
-//     );
-//     yield put(fetchReadmeSuccess(result.data));
-//   } catch (error) {
-//     console.log(error);
-//   }
-
-//   // yield takeEvery(fetchReadmeRequest, function* ({ payload: repoInfo }) {
-//   //   try {
-//   //     const result = yield call(
-//   //       reposService.fetchDetailsByOwnerAndTitle,
-//   //       repoInfo.owner,
-//   //       repoInfo.title,
-//   //       "readme"
-//   //     );
-//   //     yield put(fetchReadmeSuccess(result.data));
-//   //   } catch (error) {
-//   //     yield console.log(error);
-//   //   }
-//   // });
-// };
 
 export default function* rootSaga() {
   yield fork(repos);
