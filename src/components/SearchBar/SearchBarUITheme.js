@@ -1,6 +1,6 @@
-import { fade, makeStyles } from "@material-ui/core/styles";
+import { fade } from "@material-ui/core/styles";
 
-const useStyles = makeStyles((theme) => ({
+const styles = (theme) => ({
   search: {
     position: "relative",
     borderRadius: theme.shape.borderRadius,
@@ -69,6 +69,6 @@ const useStyles = makeStyles((theme) => ({
       background: theme.palette.action.disabled,
     },
   },
-}));
+});
 
-export default useStyles;
+export default styles;

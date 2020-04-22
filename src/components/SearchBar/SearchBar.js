@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useSnackbar } from "notistack";
+import React from "react";
+import { withSnackbar } from "notistack";
 
 import { convertMsToHumanFormat } from "../../helpers/dateTime";
 
@@ -13,96 +13,120 @@ import GitHubIcon from "@material-ui/icons/GitHub";
 import SearchIcon from "@material-ui/icons/Search";
 import TimelapseIcon from "@material-ui/icons/Timelapse";
 
-import useStyles from "./SearchBarUITheme";
+import { withStyles } from "@material-ui/core/styles";
+import styles from "./SearchBarUITheme";
 
-const SearchBar = ({ findRepoByTitle, repos }) => {
-  const classes = useStyles();
-  const [title, setTitle] = useState("");
-  const [hasError, setHasError] = useState(false);
-  const [deboncer, setDeboncer] = useState();
-  const { enqueueSnackbar } = useSnackbar();
+class SearchBar extends React.Component {
+  constructor(props) {
+    super(props);
 
-  const deboncedFunction = (fn, ms) => {
-    if (typeof deboncer !== "undefined") {
-      clearTimeout(deboncer);
+    this.state = {
+      title: "",
+      hasError: false,
+      debouncer: null,
+    };
+  }
+
+  deboncedFunction = (fn, ms) => {
+    if (Boolean(this.state.debouncer)) {
+      clearTimeout(this.state.debouncer);
     }
 
-    setDeboncer(setTimeout(fn, ms));
+    this.setState({
+      debouncer: setTimeout(fn, ms),
+    });
   };
 
-  const handleChange = (e) => {
-    setTitle(e.target.value);
-    if (!title.trim()) return;
-    deboncedFunction(sendRequest, 1000);
+  handleChange = (e) => {
+    this.setState(
+      {
+        title: e.target.value.trim(),
+      },
+      () => {
+        if (!this.state.title) return;
+        this.deboncedFunction(this.sendRequest, 1000);
+      }
+    );
   };
 
-  const handleSubmit = (e) => {
+  handleSubmit = (e) => {
     e.preventDefault();
-    if (typeof deboncer !== "undefined") {
-      clearTimeout(deboncer);
+    if (this.state.debouncer) {
+      clearTimeout(this.state.debouncer);
     }
-    sendRequest();
+    this.sendRequest();
   };
 
-  const sendRequest = () => {
-    const pureTitle = title.trim();
-
-    if (!pureTitle) {
-      setHasError(true);
-      setTitle("");
-      enqueueSnackbar("We can't find nothing", { variant: "error" });
+  sendRequest = () => {
+    if (!this.state.title) {
+      this.setState({
+        hasError: true,
+        title: "",
+      });
+      this.props.enqueueSnackbar("We can't find nothing", { variant: "error" });
       return;
     }
 
-    setHasError(false);
-    findRepoByTitle(pureTitle);
+    this.setState({
+      hasError: false,
+    });
+
+    this.props.findRepoByTitle(this.state.title);
   };
 
-  return (
-    <AppBar
-      position="relative"
-      className={`${classes.container} ${repos.pending ? classes.blocked : ""}`}
-    >
-      {repos.pending && (
-        <LinearProgress
-          className={classes.progress}
-          color="secondary"
-        ></LinearProgress>
-      )}
-      <Toolbar>
-        <form onSubmit={handleSubmit} className={classes.form}>
-          <div className={`${classes.search} ${hasError ? classes.error : ""}`}>
-            <div className={classes.searchIcon}>
-              <SearchIcon />
-            </div>
-            <InputBase
-              placeholder="Enter the name"
-              classes={{
-                root: classes.inputRoot,
-                input: classes.inputInput,
-              }}
-              value={title}
-              onInput={handleChange}
-              inputProps={{ "aria-label": "search" }}
-            />
-          </div>
-        </form>
-        {repos.total > 0 && (
-          <Badge badgeContent={repos.total} max={10000} color="primary">
-            <GitHubIcon />
-          </Badge>
+  render() {
+    const { classes, repos } = this.props;
+    const { hasError, title } = this.state;
+    return (
+      <AppBar
+        position="relative"
+        className={`${classes.container} ${
+          repos.pending ? classes.blocked : ""
+        }`}
+      >
+        {repos.pending && (
+          <LinearProgress
+            className={classes.progress}
+            color="secondary"
+          ></LinearProgress>
         )}
-        {repos.responseTime > 0 && (
-          <div className={classes.time}>
-            <TimelapseIcon />
-            <div className={classes.timeAmount}>
-              {convertMsToHumanFormat(repos.responseTime)}
+        <Toolbar>
+          <form onSubmit={this.handleSubmit} className={classes.form}>
+            <div
+              className={`${classes.search} ${hasError ? classes.error : ""}`}
+            >
+              <div className={classes.searchIcon}>
+                <SearchIcon />
+              </div>
+              <InputBase
+                placeholder="Enter the name"
+                classes={{
+                  root: classes.inputRoot,
+                  input: classes.inputInput,
+                }}
+                value={title}
+                onInput={this.handleChange}
+                inputProps={{ "aria-label": "search" }}
+              />
             </div>
-          </div>
-        )}
-      </Toolbar>
-    </AppBar>
-  );
-};
+          </form>
+          {repos.total > 0 && (
+            <Badge badgeContent={repos.total} max={10000} color="primary">
+              <GitHubIcon />
+            </Badge>
+          )}
+          {repos.responseTime > 0 && (
+            <div className={classes.time}>
+              <TimelapseIcon />
+              <div className={classes.timeAmount}>
+                {convertMsToHumanFormat(repos.responseTime)}
+              </div>
+            </div>
+          )}
+        </Toolbar>
+      </AppBar>
+    );
+  }
+}
 
-export default SearchBar;
+export default withSnackbar(withStyles(styles, { withTheme: true })(SearchBar));
