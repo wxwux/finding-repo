@@ -35,8 +35,6 @@ const repoReducer = handleActions(
       };
     },
     [fetchReposByQueryFailure]: (state, action) => {
-      console.log("fetchReposByQueryFailure");
-
       return {
         ...state,
         pending: false,
