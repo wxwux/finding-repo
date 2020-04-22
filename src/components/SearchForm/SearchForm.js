@@ -28,7 +28,6 @@ class SearchBar extends React.Component {
 
   handleChange = (e) => {
     const sendRequest = () => {
-      if (!this.state.title) return;
       this.deboncedFunction(
         this.props.sendRequest.bind(this, this.state.title),
         1000
