@@ -29,6 +29,11 @@ export const convertMsToHumanFormat = (timeMs) => {
   const seconds = Math.floor(timeMs / 1000);
   const ms = Math.round(timeMs % 1000);
 
+  if (isNaN(seconds) || isNaN(ms)) {
+    console.warn("can't convert the value");
+    return "0ms";
+  }
+
   if (seconds > 0) {
     return `${seconds}s ${ms}ms`;
   } else {

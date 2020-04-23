@@ -6,21 +6,19 @@ export class ErrorObject {
 }
 
 export const generateErrorObject = (error) => {
-  const responseObj = error.response;
-
-  if (!responseObj) {
+  if (!error || !error.response) {
     console.warn("no response object was provided");
     return new ErrorObject("Unknown error", 520);
   }
 
-  const status = responseObj.status;
+  const status = error.response.status;
 
   switch (status) {
     case 422:
       return new ErrorObject("Entered the wrong value", status);
     case 523:
       return new ErrorObject(
-        "You've reached requests limit of Github API",
+        "You've reached requests limit of Github API, retry in a minute",
         status
       );
     case 404:
