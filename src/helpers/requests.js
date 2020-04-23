@@ -1,37 +1,22 @@
-export const addInterceptors = (axiosInstance, interceptors) => {
+export const measureTime = () => {
   let startTime;
   let endTime;
 
-  axiosInstance.interceptors.request.use(
-    (config) => {
+  return {
+    startMeasurement() {
       startTime = performance.now();
-      return config;
     },
-    (error) => {
-      console.log("error request", error.response.status);
-      return Promise.reject(error);
-    }
-  );
-
-  axiosInstance.interceptors.response.use(
-    (response) => {
+    endMeasurement() {
       endTime = performance.now();
-
-      const responseTime = endTime - startTime;
-
-      response.responseTime = responseTime;
-
-      return response;
+      return endTime - startTime;
     },
-    (error) => {
-      if (typeof error.response === "undefined") {
-        error.response = {};
-        error.response.status = 523;
-        error.response.data = "You've reached requests limits of Github API";
-      }
-      return Promise.reject(error);
-    }
-  );
+  };
+};
 
-  return axiosInstance;
+export const addUnknownErrorStatus = (errorConfig) => {
+  if (typeof errorConfig.response !== "undefined") return errorConfig;
+  errorConfig.response = {};
+  errorConfig.response.status = 523;
+  errorConfig.response.data = "Github API limits error";
+  return errorConfig;
 };
