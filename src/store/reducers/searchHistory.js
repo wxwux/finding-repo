@@ -1,6 +1,6 @@
 import { handleActions } from "redux-actions";
 import { addSearchHistoryItem } from "../actions";
-import { cloneArrayAndRemoveItem } from "../../helpers/array";
+import { cloneArray } from "../../helpers/arrays";
 
 const searchHistoryReducer = handleActions(
   {
@@ -9,7 +9,7 @@ const searchHistoryReducer = handleActions(
       const itemAlreadyExists = state.includes(item);
 
       if (itemAlreadyExists) {
-        const stateWithoutItem = cloneArrayAndRemoveItem(state, item);
+        const stateWithoutItem = cloneArray(state).removeItem(item).get();
         stateWithoutItem.unshift(item);
         return stateWithoutItem;
       } else {
