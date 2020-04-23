@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useSnackbar } from "notistack";
 
 import useStyles from "./SearchBarUITheme";
@@ -14,7 +14,7 @@ import SearchForm from "../../components/SearchForm";
 import GitHubIcon from "@material-ui/icons/GitHub";
 import TimelapseIcon from "@material-ui/icons/Timelapse";
 
-const SearchBar = ({ repos, findRepoByTitle }) => {
+const SearchBar = ({ repos, findRepoByTitle, lastSearchedItem }) => {
   const [hasError, setHasError] = useState(false);
   const classes = useStyles();
   const { enqueueSnackbar } = useSnackbar();
@@ -29,6 +29,13 @@ const SearchBar = ({ repos, findRepoByTitle }) => {
     setHasError(false);
     findRepoByTitle(title);
   };
+
+  useEffect(() => {
+    if (Boolean(repos.error)) {
+      enqueueSnackbar(repos.error.message, { variant: "error" });
+    }
+  });
+
   return (
     <AppBar
       position="relative"
@@ -44,6 +51,7 @@ const SearchBar = ({ repos, findRepoByTitle }) => {
           sendRequest={sendRequest}
           hasError={hasError}
           disabled={repos.pending}
+          lastSearchedItem={lastSearchedItem}
         />
         {repos.total > 0 && (
           <Badge badgeContent={repos.total} max={10000} color="primary">

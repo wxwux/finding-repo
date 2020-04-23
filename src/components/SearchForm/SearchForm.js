@@ -16,6 +16,14 @@ class SearchBar extends React.Component {
     };
   }
 
+  componentDidUpdate(prevProps) {
+    if (this.props.lastSearchedItem !== prevProps.lastSearchedItem) {
+      this.setState({
+        title: this.props.lastSearchedItem,
+      });
+    }
+  }
+
   deboncedFunction = (fn, ms) => {
     if (Boolean(this.state.debouncer)) {
       clearTimeout(this.state.debouncer);

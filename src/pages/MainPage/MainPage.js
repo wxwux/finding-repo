@@ -26,7 +26,6 @@ const MainPage = ({
   searchHistory,
 }) => {
   const classes = useStyles();
-  const { enqueueSnackbar } = useSnackbar();
 
   const handlePaginationChange = (e, pageNum) => {
     const query = queryConstructor.byPageForTitle(pageNum, lastSearchedItem);
@@ -38,13 +37,13 @@ const MainPage = ({
     fetchReposByQueryRequest(query);
   };
 
-  if (Boolean(repos.error)) {
-    enqueueSnackbar(repos.error.message, { variant: "error" });
-  }
-
   return (
     <Container maxWidth="sm" className={classes.rootContainer}>
-      <SearchBar findRepoByTitle={findRepoByTitle} repos={repos} />
+      <SearchBar
+        lastSearchedItem={lastSearchedItem}
+        findRepoByTitle={findRepoByTitle}
+        repos={repos}
+      />
       {searchHistory.length > 0 && (
         <SearchHistory
           searchHistory={searchHistory}
@@ -61,6 +60,8 @@ const MainPage = ({
           <Pagination
             count={repos.pagination.total}
             onChange={handlePaginationChange}
+            page={repos.pagination.active}
+            disabled={repos.pending}
             showFirstButton
             showLastButton
           />
