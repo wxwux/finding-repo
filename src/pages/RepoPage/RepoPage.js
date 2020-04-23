@@ -5,6 +5,8 @@ import { Redirect } from "react-router-dom";
 import { fetchSingleRepoRequest } from "../../store/actions";
 import LinearProgress from "@material-ui/core/LinearProgress";
 
+import { useSnackbar } from "notistack";
+
 import UserInfo from "../../components/UserInfo";
 import RepoInfo from "../../components/RepoInfo";
 
@@ -17,9 +19,9 @@ const RepoPage = ({ fetchSingleRepoRequest, repo }) => {
   const { pending, error, data } = repo;
   const classes = useStyles();
 
-  useEffect(() => {
-    console.log("effect works");
+  const { enqueueSnackbar } = useSnackbar();
 
+  useEffect(() => {
     fetchSingleRepoRequest({
       owner,
       title,
@@ -32,6 +34,11 @@ const RepoPage = ({ fetchSingleRepoRequest, repo }) => {
 
   if (error && error.status === 404) {
     return <Redirect to="/404" />;
+  }
+
+  if (error) {
+    enqueueSnackbar(error.message, { variant: "error" });
+    return <Redirect to="/" />;
   }
 
   return (

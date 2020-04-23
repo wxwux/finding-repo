@@ -15,6 +15,7 @@ const useStyles = makeStyles((theme) => ({
   paginationContainer: {
     display: "flex",
     justifyContent: "center",
+    userSelect: "none"
   },
 }));
 
