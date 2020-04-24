@@ -13,11 +13,13 @@ import { Pagination } from "../../helpers/pagination";
 import * as reposService from "../../services";
 
 const searchHistory = function* (query) {
+  if (query.type !== "title") return;
+  
   const [title] = query.originalValues;
   yield put(addSearchHistoryItem(title));
 };
 
-const reposList = function* (query) {
+export const reposList = function* (query) {
   try {
     const result = yield call(reposService.fetchReposByQuery, query);
     const pagination = new Pagination(result.headers.link);
@@ -29,9 +31,6 @@ const reposList = function* (query) {
         responseTime: result.responseTime,
       })
     );
-    if (query.type === "title") {
-      yield call(searchHistory, query);
-    }
   } catch (error) {
     const errorObject = generateErrorObject(error);
     yield put(fetchReposByQueryFailure(errorObject));
@@ -41,5 +40,6 @@ const reposList = function* (query) {
 export default function* () {
   yield takeLatest(fetchReposByQueryRequest, function* ({ payload: query }) {
     yield call(reposList, query);
+    yield call(searchHistory, query);
   });
-};
+}
