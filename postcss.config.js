@@ -1,4 +1,5 @@
 module.exports = {
+  parser: 'postcss-safe-parser',
   plugins: [
     require("postcss-flexbugs-fixes"),
     require("postcss-normalize"),

@@ -1,56 +1,56 @@
 const HtmlWebPackPlugin = require("html-webpack-plugin");
-const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const path = require("path");
+const mergeConfig = require("webpack-merge");
+const devConfig = require("./webpack.config.dev")();
+const prodConfig = require("./webpack.config.prod")();
 
 module.exports = (env, argv) => {
+  const isDev = argv.mode === "development";
   process.env.BABEL_ENV = argv.mode;
+
+  const js = {
+    test: /\.(js)$/,
+    exclude: /node_modules/,
+    use: {
+      loader: "babel-loader",
+    },
+  };
+
+  const html = {
+    test: /\.html$/,
+    use: [
+      {
+        loader: "html-loader",
+      },
+    ],
+  };
+
+  const css = {
+    test: /\.css$/,
+    use: ["style-loader", "css-loader", "postcss-loader"],
+  };
+
   const config = {
     entry: "./src/index.js",
     output: {
       path: path.resolve(__dirname, "./dist"),
+      filename: "[name].[hash].build.js",
+      chunkFilename: "[chunkhash].js",
+      publicPath: "/",
     },
     module: {
-      rules: [
-        {
-          enforce: 'pre',
-          test: /\.js$/,
-          exclude: /node_modules/,
-          loader: 'eslint-loader',
-        },
-        {
-          test: /\.(js)$/,
-          exclude: /node_modules/,
-          use: {
-            loader: "babel-loader",
-          },
-        },
-        {
-          test: /\.html$/,
-          use: [
-            {
-              loader: "html-loader",
-            },
-          ],
-        },
-        {
-          test: /\.css$/,
-          use: ["style-loader", "css-loader", "postcss-loader"],
-        },
-      ],
+      rules: [js, html, css],
     },
     plugins: [
-      new CaseSensitivePathsPlugin(),
       new HtmlWebPackPlugin({
-        template: "./public/index.html",
+        template: path.resolve(__dirname, "index.html"),
       }),
     ],
-    devServer: {
-      historyApiFallback: true,
-      noInfo: false,
-      overlay: true,
-    },
-    devtool: "#eval-source-map",
   };
 
-  return config;
+  if (isDev) {
+    return mergeConfig(config, devConfig);
+  } else {
+    return mergeConfig(config, prodConfig);
+  }
 };
