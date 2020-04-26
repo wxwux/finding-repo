@@ -2,7 +2,7 @@ import { decodeToUnicode } from "./base64";
 import MarkdownIt from "markdown-it";
 
 export const cutOffTheBadges = (markdown) => {
-  const badgeRegex = /(\[\!)(.*)(\]|\))/gm;
+  const badgeRegex = /(\[!)(.*)(\]|\))/gm;
   return markdown.replace(badgeRegex, "");
 };
 
