@@ -6,6 +6,7 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
+import LockIcon from "@material-ui/icons/Lock";
 
 import useStyles from "./ReposListUITheme";
 
@@ -25,14 +26,15 @@ const ReposList = ({ repos }) => {
               height="50"
             />
           </div>
-          <Typography component="h5" variant="h5">
+          <Typography component="h5" className={classes.title} variant="h5">
             {repo.name}
           </Typography>
+          {repo.private && <LockIcon className={classes.lock} />}
         </NavLink>
       </ListItem>
     );
   });
-  
+
   return <List> {Items} </List>;
 };
 

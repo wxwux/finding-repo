@@ -19,3 +19,14 @@ export const fetchReadmeRequest = createAction("FETCH_README_REQUEST");
 export const fetchReadmeFailure = createAction("FETCH_README_FAILURE");
 
 export const addSearchHistoryItem = createAction("ADD_SEARCH_HISTORY_ITEM");
+
+export const fetchUserRequest = createAction("FETCH_USER_REQUEST");
+export const fetchUserSuccess = createAction("FETCH_USER_SUCCESS");
+export const fetchUserFailure = createAction("FETCH_USER_FAILURE");
+
+export const fetchTokenRequest = createAction("FETCH_TOKEN_REQUEST");
+export const fetchTokenSuccess = createAction("FETCH_TOKEN_SUCCESS");
+export const fetchTokenFailure = createAction("FETCH_TOKEN_FAILURE");
+
+export const logoutUser = createAction("LOGOUT_USER");
+

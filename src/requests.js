@@ -2,9 +2,8 @@ import axios from "axios";
 import { measureTime, addUnknownErrorStatus } from "./helpers/requests";
 const measurer = measureTime();
 
-const requests = axios.create({
-  baseURL: "https://api.github.com",
-});
+const requests = axios.create(); 
+
 
 requests.interceptors.request.use(
   (config) => {

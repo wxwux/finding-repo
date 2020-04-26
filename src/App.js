@@ -4,6 +4,7 @@ import { SnackbarProvider } from "notistack";
 
 import MainPage from "./pages/MainPage";
 import RepoPage from "./pages/RepoPage";
+import AuthPage from "./pages/AuthPage";
 import NotFoundPage from "./pages/NotFoundPage";
 
 const App = () => {
@@ -13,6 +14,7 @@ const App = () => {
         <Switch>
           <Route path="/" exact component={MainPage} />
           <Route path="/:owner/:title" exact component={RepoPage} />
+          <Route path="/auth" component={AuthPage} exact />
           <Route component={NotFoundPage} />
         </Switch>
       </Router>

@@ -9,12 +9,16 @@ import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Badge from "@material-ui/core/Badge";
 import LinearProgress from "@material-ui/core/LinearProgress";
+import IconButton from "@material-ui/core/IconButton";
+import VpnKeyIcon from "@material-ui/icons/VpnKey";
 import SearchForm from "../../components/SearchForm";
 
 import GitHubIcon from "@material-ui/icons/GitHub";
 import TimelapseIcon from "@material-ui/icons/Timelapse";
 
-const SearchBar = ({ repos, findRepoByTitle, lastSearchedItem }) => {
+import { authLink } from "../../services/auth";
+
+const SearchBar = ({ repos, findRepoByTitle, lastSearchedItem, user }) => {
   const [hasError, setHasError] = useState(false);
   const classes = useStyles();
   const { enqueueSnackbar } = useSnackbar();
@@ -36,6 +40,10 @@ const SearchBar = ({ repos, findRepoByTitle, lastSearchedItem }) => {
     }
   });
 
+  const goToAuthPage = () => {
+    window.location.href = authLink;
+  };
+
   return (
     <AppBar
       position="relative"
@@ -47,6 +55,15 @@ const SearchBar = ({ repos, findRepoByTitle, lastSearchedItem }) => {
         </div>
       )}
       <Toolbar>
+        {!user.data && (
+          <IconButton
+            color="inherit"
+            onClick={goToAuthPage}
+            aria-label="add an alarm"
+          >
+            <VpnKeyIcon />
+          </IconButton>
+        )}
         <SearchForm
           sendRequest={sendRequest}
           hasError={hasError}

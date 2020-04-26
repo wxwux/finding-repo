@@ -23,6 +23,8 @@ export const generateErrorObject = (error) => {
       );
     case 404:
       return new ErrorObject("Item hasn't been found", status);
+    case 401:
+      return new ErrorObject("Bad credentials was provided", status);
     default:
       return new ErrorObject("Unknown error", 520);
   }

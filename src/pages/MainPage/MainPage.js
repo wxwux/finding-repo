@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { connect } from "react-redux";
 
 import {
   fetchReposByQueryRequest,
   addSearchHistoryItem,
+  fetchUserRequest,
+  logoutUser,
 } from "../../store/actions";
 import { queryConstructor } from "../../helpers/queries";
 import { lastSearchSelector } from "../../store/selectors";
@@ -14,8 +16,7 @@ import Container from "@material-ui/core/Container";
 import Paper from "@material-ui/core/Paper";
 import ReposList from "../../components/ReposList";
 import SearchHistory from "../../components/SearchHistory";
-
-import { useSnackbar } from "notistack";
+import LoggedUser from "../../components/LoggedUser";
 
 import useStyles from "./MainPageUITheme";
 
@@ -24,6 +25,9 @@ const MainPage = ({
   fetchReposByQueryRequest,
   lastSearchedItem,
   searchHistory,
+  fetchUserRequest,
+  user,
+  logoutUser,
 }) => {
   const classes = useStyles();
 
@@ -37,12 +41,24 @@ const MainPage = ({
     fetchReposByQueryRequest(query);
   };
 
+  const token = localStorage.getItem("token");
+
+  useEffect(() => {
+    if (token) {
+      fetchUserRequest();
+    }
+  }, [fetchUserRequest, token]);
+
   return (
     <Container maxWidth="sm" className={classes.rootContainer}>
+      {token && token.length > 0 && (
+        <LoggedUser logout={logoutUser} user={user} />
+      )}
       <SearchBar
         lastSearchedItem={lastSearchedItem}
         findRepoByTitle={findRepoByTitle}
         repos={repos}
+        user={user}
       />
       {searchHistory.length > 0 && (
         <SearchHistory
@@ -71,12 +87,18 @@ const MainPage = ({
   );
 };
 
-const mapDispatchToProps = { fetchReposByQueryRequest, addSearchHistoryItem };
+const mapDispatchToProps = {
+  fetchReposByQueryRequest,
+  addSearchHistoryItem,
+  fetchUserRequest,
+  logoutUser,
+};
 
 const mapStateToProps = (state) => ({
   repos: state.repos,
   lastSearchedItem: lastSearchSelector(state),
   searchHistory: state.searchHistory,
+  user: state.user,
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(MainPage);

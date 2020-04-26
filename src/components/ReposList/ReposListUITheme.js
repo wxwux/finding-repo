@@ -24,6 +24,9 @@ const useStyles = makeStyles((theme) => {
       textOverflow: "ellipsis",
       whiteSpace: "nowrap",
     },
+    lock: {
+      marginLeft: "auto"
+    }
   };
 });
 
