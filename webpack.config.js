@@ -33,7 +33,7 @@ module.exports = (env, argv) => {
   const config = {
     entry: "./src/index.js",
     output: {
-      path: path.resolve(__dirname, "./dist"),
+      path: path.resolve(__dirname, "./docs"),
       filename: "[name].[hash].build.js",
       chunkFilename: "[chunkhash].js",
       publicPath: "/",
