@@ -25,7 +25,7 @@ const Readme = ({ readme }) => {
   return (
     <Truncate
       lines={30}
-      ellipsis={"<span>read more</span>"}
+      ellipsis={"..."}
       dangerouslySetInnerHTML={{
         __html: getHtmlFromMarkdownBase64(data.content),
       }}
