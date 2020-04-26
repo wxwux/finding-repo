@@ -1,9 +1,9 @@
-const fs = require("fs");
-
 module.exports = {
   plugins: [
+    require("postcss-flexbugs-fixes"),
+    require("postcss-normalize"),
     require("autoprefixer")({
-      cascade: false
-    })
-  ]
+      cascade: false,
+    }),
+  ],
 };
