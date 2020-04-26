@@ -1,6 +1,10 @@
 import { fork, put, takeLatest, call } from "redux-saga/effects";
 
 import { getParamFromQueryString } from "../../helpers/queries";
+import {
+  generateErrorObject,
+  emulateResponseStatusError,
+} from "../../helpers/errors";
 
 import {
   fetchTokenRequest,
@@ -15,11 +19,16 @@ const tokenSaga = function* () {
     try {
       const result = yield call(getAccessToken, code);
       const token = getParamFromQueryString(result.data, "access_token");
-      yield put(fetchTokenSuccess(token));
-      localStorage.setItem("token", token);
-      window.location.replace("/");
+      if (token) {
+        yield put(fetchTokenSuccess(token));
+        localStorage.setItem("token", token);
+        window.location.replace("/");
+      } else {
+        yield call(emulateResponseStatusError(401));
+      }
     } catch (error) {
-      console.log(error);
+      const errorObject = generateErrorObject(error);
+      yield put(fetchTokenFailure(errorObject));
     }
   });
 };

@@ -5,9 +5,19 @@ export class ErrorObject {
   }
 }
 
+export const emulateResponseStatusError = (status) => {
+  const errorObject = {
+    response: {
+      status: status,
+    }
+  }
+
+  throw errorObject;
+} 
+
 export const generateErrorObject = (error) => {
   if (!error || !error.response) {
-    console.warn("no response object was provided");
+    console.warn("no response object were provided");
     return new ErrorObject("Unknown error", 520);
   }
 

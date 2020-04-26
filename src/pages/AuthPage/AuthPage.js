@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useLocation, useHistory } from "react-router-dom";
+import { useLocation, useHistory, Link } from "react-router-dom";
 import { getParamFromQueryString } from "../../helpers/queries";
 import { connect } from "react-redux";
 import { fetchUserRequest, fetchTokenRequest } from "../../store/actions";
@@ -28,7 +28,15 @@ const AuthPage = ({ fetchUserRequest, fetchTokenRequest, token }) => {
   }
 
   if (token.error) {
-    return <ErrorOutlineIcon className={[classes.icon, classes.error]} />;
+    return (
+      <>
+        <ErrorOutlineIcon className={[classes.icon, classes.error]} />
+        <Typography variant="h5" component="h5" gutterBottom>
+          {token.error.message}
+        </Typography>
+        <Link to="/">Go Back</Link>
+      </>
+    );
   }
 
   return (
