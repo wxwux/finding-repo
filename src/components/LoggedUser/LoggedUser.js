@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import PropTypes from "prop-types";
 import Card from "@material-ui/core/Card";
 import useStyles from "./LoggedUserUITheme";
 import Button from "@material-ui/core/Button";
@@ -40,4 +41,11 @@ const LoggedUser = ({ user, logout }) => {
   );
 };
 
-export default LoggedUser;
+LoggedUser.propTypes = {
+  user: PropTypes.shape({
+    data: PropTypes.object,
+  }),
+  logout: PropTypes.func.isRequired,
+};
+
+export default React.memo(LoggedUser);

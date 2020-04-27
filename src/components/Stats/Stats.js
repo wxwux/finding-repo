@@ -1,5 +1,5 @@
 import React from "react";
-
+import PropTypes from "prop-types";
 import Grid from "@material-ui/core/Grid";
 import Divider from "@material-ui/core/Divider";
 
@@ -36,4 +36,11 @@ const Stats = ({ forks, issues, subscribers, stars }) => {
   );
 };
 
-export default Stats;
+Stats.propTypes = {
+  forks: PropTypes.number.isRequired,
+  issues: PropTypes.number.isRequired,
+  subscribers: PropTypes.number.isRequired,
+  stars: PropTypes.number.isRequired,
+};
+
+export default React.memo(Stats);

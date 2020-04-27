@@ -1,9 +1,7 @@
 import React from "react";
-import { connect } from "react-redux";
+import PropTypes from "prop-types";
 import Truncate from "react-truncate-html";
 import { getHtmlFromMarkdownBase64 } from "../../helpers/markdown";
-
-import { fetchReadmeRequest } from "../../store/actions";
 
 import CircularProgress from "@material-ui/core/CircularProgress";
 import useStyles from "./ReadmeUITheme";
@@ -33,7 +31,8 @@ const Readme = ({ readme }) => {
   );
 };
 
-const mapDispatchToProps = { fetchReadmeRequest };
-const mapStateToProps = ({ readme }) => ({ readme });
+Readme.propTypes = {
+  readme: PropTypes.object,
+};
 
-export default connect(mapStateToProps, mapDispatchToProps)(Readme);
+export default React.memo(Readme);

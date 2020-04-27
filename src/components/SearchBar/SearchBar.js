@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import PropTypes from "prop-types";
 import { useSnackbar } from "notistack";
 
 import useStyles from "./SearchBarUITheme";
@@ -72,7 +73,12 @@ const SearchBar = ({ repos, findRepoByTitle, lastSearchedItem, user }) => {
           lastSearchedItem={lastSearchedItem}
         />
         {repos.total > 0 && (
-          <Badge id="total-repos" badgeContent={repos.total} max={10000} color="primary">
+          <Badge
+            id="total-repos"
+            badgeContent={repos.total}
+            max={10000}
+            color="primary"
+          >
             <GitHubIcon />
           </Badge>
         )}
@@ -89,4 +95,15 @@ const SearchBar = ({ repos, findRepoByTitle, lastSearchedItem, user }) => {
   );
 };
 
-export default SearchBar;
+SearchBar.propTypes = {
+  repos: PropTypes.shape({
+    responseTime: PropTypes.number,
+    total: PropTypes.number.isRequired,
+    pending: PropTypes.bool
+  }),
+  findRepoByTitle: PropTypes.func.isRequired,
+  lastSearchedItem: PropTypes.string,
+  user: PropTypes.object,
+};
+
+export default React.memo(SearchBar);

@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
@@ -25,4 +26,11 @@ const UserInfo = ({ user }) => {
   );
 };
 
-export default UserInfo;
+UserInfo.propTypes = {
+  user: PropTypes.shape({
+    'avatar_url': PropTypes.string.isRequired,
+    login: PropTypes.string.isRequired
+  })
+}
+
+export default React.memo(UserInfo);

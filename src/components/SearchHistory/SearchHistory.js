@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 import Fab from "@material-ui/core/Fab";
 
@@ -27,4 +28,9 @@ const SearchHistory = ({ searchHistory, findRepoByTitle }) => {
   );
 };
 
-export default SearchHistory;
+SearchHistory.propTypes = {
+  searchHistory: PropTypes.array.isRequired,
+  findRepoByTitle: PropTypes.func.isRequired,
+};
+
+export default React.memo(SearchHistory);

@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 import InputBase from "@material-ui/core/InputBase";
 import SearchIcon from "@material-ui/icons/Search";
@@ -6,7 +7,7 @@ import SearchIcon from "@material-ui/icons/Search";
 import { withStyles } from "@material-ui/core/styles";
 import styles from "./SearchFormUITheme";
 
-class SearchBar extends React.Component {
+class SearchBar extends React.PureComponent {
   constructor(props) {
     super(props);
 
@@ -84,6 +85,12 @@ class SearchBar extends React.Component {
       </form>
     );
   }
+}
+
+SearchBar.propTypes = {
+  lastSearchedItem: PropTypes.string,
+  hasError: PropTypes.bool,
+  disabled: PropTypes.bool 
 }
 
 export default withStyles(styles, { withTheme: true })(SearchBar);

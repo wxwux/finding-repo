@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { getRelativeDate } from "../../helpers/dateTime";
 
 import Readme from "../Readme";
@@ -11,7 +12,7 @@ import CardContent from "@material-ui/core/CardContent";
 
 import useStyles from "./RepoInfoUITheme";
 
-const RepoInfo = ({ repo }) => {
+const RepoInfo = ({ repo, readme, fetchReadmeRequest }) => {
   const classes = useStyles();
 
   const relativeDate = (date) => {
@@ -26,14 +27,20 @@ const RepoInfo = ({ repo }) => {
         subscribers={repo["subscribers_count"]}
         stars={repo["stargazers_count"]}
       />
-      <Typography variant="h2" id="repo-title" component="h1" className={classes.title}>
+      <Typography
+        variant="h2"
+        id="repo-title"
+        component="h1"
+        className={classes.title}
+      >
         {repo.name}
       </Typography>
       <Typography variant="h6" component="h6" className={classes.changed}>
-        last changed: <span id="last-changed">{relativeDate(repo["pushed_at"])}</span>
+        last changed:{" "}
+        <span id="last-changed">{relativeDate(repo["pushed_at"])}</span>
       </Typography>
 
-      { repo.description && repo.description.length > 0 && (
+      {repo.description && repo.description.length > 0 && (
         <>
           <Divider className={classes.divider} />
           <Typography
@@ -47,11 +54,17 @@ const RepoInfo = ({ repo }) => {
       )}
       <Card>
         <CardContent id="readme-container">
-          <Readme />
+          <Readme readme={readme} />
         </CardContent>
       </Card>
     </>
   );
 };
 
-export default RepoInfo;
+RepoInfo.propTypes = {
+  repo: PropTypes.object.isRequired,
+  readme: PropTypes.object,
+  fetchReadmeRequest: PropTypes.func.isRequired,
+};
+
+export default React.memo(RepoInfo);

@@ -18,6 +18,7 @@
     "markdown-it": "^10.0.0",
     "moment": "^2.24.0",
     "notistack": "^0.9.11",
+    "prop-types": "^15.7.2",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-lazy-load-image-component": "^1.4.3",

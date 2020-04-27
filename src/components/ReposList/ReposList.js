@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { NavLink } from "react-router-dom";
 
 import Typography from "@material-ui/core/Typography";
@@ -38,4 +39,8 @@ const ReposList = ({ repos }) => {
   return <List id="results-list"> {Items} </List>;
 };
 
-export default ReposList;
+ReposList.propTypes = {
+  repos: PropTypes.array.isRequired
+}
+
+export default React.memo(ReposList);

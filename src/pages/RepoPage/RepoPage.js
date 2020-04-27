@@ -2,7 +2,12 @@ import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
-import { fetchSingleRepoRequest } from "../../store/actions";
+
+import {
+  fetchSingleRepoRequest,
+  fetchReadmeRequest,
+} from "../../store/actions";
+
 import LinearProgress from "@material-ui/core/LinearProgress";
 
 import { useSnackbar } from "notistack";
@@ -14,7 +19,12 @@ import Grid from "@material-ui/core/Grid";
 import Container from "@material-ui/core/Container";
 import useStyles from "./RepoPageUITheme";
 
-const RepoPage = ({ fetchSingleRepoRequest, repo }) => {
+const RepoPage = ({
+  fetchSingleRepoRequest,
+  repo,
+  readme,
+  fetchReadmeRequest,
+}) => {
   const { owner, title } = useParams();
   const { pending, error, data } = repo;
   const classes = useStyles();
@@ -48,14 +58,18 @@ const RepoPage = ({ fetchSingleRepoRequest, repo }) => {
           <UserInfo user={data.owner} />
         </Grid>
         <Grid item xs={8}>
-          <RepoInfo repo={data} />
+          <RepoInfo
+            repo={data}
+            readme={readme}
+            fetchReadmeRequest={fetchReadmeRequest}
+          />
         </Grid>
       </Grid>
     </Container>
   );
 };
 
-const mapDispatchToProps = { fetchSingleRepoRequest };
-const mapStateToProps = ({ singleRepo: repo }) => ({ repo });
+const mapDispatchToProps = { fetchSingleRepoRequest, fetchReadmeRequest };
+const mapStateToProps = ({ singleRepo: repo, readme }) => ({ repo, readme });
 
 export default connect(mapStateToProps, mapDispatchToProps)(RepoPage);
