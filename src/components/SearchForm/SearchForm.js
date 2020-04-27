@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import i18n from "../../../i18n";
 
 import InputBase from "@material-ui/core/InputBase";
 import SearchIcon from "@material-ui/icons/Search";
@@ -70,7 +71,7 @@ class SearchBar extends React.PureComponent {
             <SearchIcon />
           </div>
           <InputBase
-            placeholder="Enter the name"
+            placeholder={i18n.ui("search.string", "Enter the name")}
             classes={{
               root: classes.inputRoot,
               input: classes.inputInput,
@@ -90,7 +91,7 @@ class SearchBar extends React.PureComponent {
 SearchBar.propTypes = {
   lastSearchedItem: PropTypes.string,
   hasError: PropTypes.bool,
-  disabled: PropTypes.bool 
-}
+  disabled: PropTypes.bool,
+};
 
 export default withStyles(styles, { withTheme: true })(SearchBar);

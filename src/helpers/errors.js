@@ -1,8 +1,9 @@
+import i18n from "../../i18n";
 export class ErrorObject {
-  constructor(message, status, type = "error") {
-    this.message = message;
+  constructor(status, type = "error") {
+    this.message = i18n.error(status);
     this.status = status;
-    this.type = type
+    this.type = type;
   }
 }
 
@@ -19,26 +20,23 @@ export const emulateResponseStatusError = (status) => {
 export const generateErrorObject = (error) => {
   if (!error || !error.response) {
     console.warn("no response object were provided");
-    return new ErrorObject("Unknown error", 520);
+    return new ErrorObject(520);
   }
 
   const status = error.response.status;
 
   switch (status) {
     case 204:
-      return new ErrorObject("Nothing was found", status, "warning");
+      return new ErrorObject(status, "warning");
     case 422:
-      return new ErrorObject("Entered the wrong value", status);
+      return new ErrorObject(status);
     case 523:
-      return new ErrorObject(
-        "You've reached requests limit of Github API, retry in a minute",
-        status
-      );
+      return new ErrorObject(status);
     case 404:
-      return new ErrorObject("Item hasn't been found", status);
+      return new ErrorObject(status);
     case 401:
-      return new ErrorObject("Bad credentials was provided", status);
+      return new ErrorObject(status);
     default:
-      return new ErrorObject("Unknown error", 520);
+      return new ErrorObject(520);
   }
 };

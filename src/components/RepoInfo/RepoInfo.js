@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { getRelativeDate } from "../../helpers/dateTime";
+import i18n from "../../../i18n";
 
 import Readme from "../Readme";
 import Stats from "../Stats";
@@ -36,7 +37,7 @@ const RepoInfo = ({ repo, readme, fetchReadmeRequest }) => {
         {repo.name}
       </Typography>
       <Typography variant="h6" component="h6" className={classes.changed}>
-        last changed:{" "}
+        {i18n.ui("repo.changed", "last changed")}: {" "}
         <span id="last-changed">{relativeDate(repo["pushed_at"])}</span>
       </Typography>
 

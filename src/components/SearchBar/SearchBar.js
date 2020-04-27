@@ -16,6 +16,7 @@ import SearchForm from "../../components/SearchForm";
 
 import GitHubIcon from "@material-ui/icons/GitHub";
 import TimelapseIcon from "@material-ui/icons/Timelapse";
+import i18n from "../../../i18n";
 
 import { authLink } from "../../services/auth";
 
@@ -27,7 +28,9 @@ const SearchBar = ({ repos, findRepoByTitle, lastSearchedItem, user }) => {
   const sendRequest = (title) => {
     if (!title) {
       setHasError(true);
-      enqueueSnackbar("We can't find nothing", { variant: "error" });
+      enqueueSnackbar(i18n.error("find.nothing", "We can't find nothing"), {
+        variant: "error",
+      });
       return;
     }
 
