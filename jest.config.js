@@ -3,20 +3,20 @@ module.exports = {
     "<rootDir>/src"
   ],
   "collectCoverageFrom": [
-    "src/**/*.{js,jsx,ts,tsx}",
+    "src/**/*.{js}",
     "!src/**/*.d.ts"
   ],
   "setupFilesAfterEnv": [
-    "<rootDir>/src/setupTests.js"
+    "<rootDir>/jest/setupTests.js"
   ],
   "testMatch": [
-    "<rootDir>/src/**/__tests__/**/*.{js,jsx,ts,tsx}",
-    "<rootDir>/src/**/*.{spec,test}.{js,jsx,ts,tsx}"
+    "<rootDir>/src/**/__tests__/**/*.{js}",
+    "<rootDir>/src/**/*.{spec,test}.{js}"
   ],
   "transform": {
     "^.+\\.(js|jsx|ts|tsx)$": "<rootDir>/node_modules/babel-jest",
-    "^.+\\.css$": "<rootDir>/config/jest/cssTransform.js",
-    "^(?!.*\\.(js|jsx|ts|tsx|css|json)$)": "<rootDir>/config/jest/fileTransform.js"
+    "^.+\\.css$": "<rootDir>/jest/cssTransform.js",
+    "^(?!.*\\.(js|jsx|ts|tsx|css|json)$)": "<rootDir>/jest/fileTransform.js"
   },
   "transformIgnorePatterns": [
     "[/\\\\]node_modules[/\\\\].+\\.(js|jsx|ts|tsx)$",
