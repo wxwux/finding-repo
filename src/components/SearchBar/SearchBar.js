@@ -61,7 +61,7 @@ const SearchBar = ({ repos, findRepoByTitle, lastSearchedItem, user }) => {
             id="login-button"
             color="inherit"
             onClick={goToAuthPage}
-            aria-label="add an alarm"
+            aria-label="authenticate"
           >
             <VpnKeyIcon />
           </IconButton>
