@@ -1,4 +1,5 @@
 /dist
+/docs
 # dependencies
 /node_modules
 /.pnp

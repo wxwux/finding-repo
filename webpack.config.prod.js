@@ -19,7 +19,7 @@ module.exports = () => {
   };
   return {
     output: {
-      publicPath: "/finding-repo/",
+      publicPath: "/",
     },
     module: {
       rules: [css],
