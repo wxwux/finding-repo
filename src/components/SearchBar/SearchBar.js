@@ -37,9 +37,9 @@ const SearchBar = ({ repos, findRepoByTitle, lastSearchedItem, user }) => {
 
   useEffect(() => {
     if (Boolean(repos.error)) {
-      enqueueSnackbar(repos.error.message, { variant: "error" });
+      enqueueSnackbar(repos.error.message, { variant: repos.error.type });
     }
-  });
+  }, [enqueueSnackbar, repos.error]);
 
   const goToAuthPage = () => {
     window.location.href = authLink;
@@ -99,7 +99,7 @@ SearchBar.propTypes = {
   repos: PropTypes.shape({
     responseTime: PropTypes.number,
     total: PropTypes.number.isRequired,
-    pending: PropTypes.bool
+    pending: PropTypes.bool,
   }),
   findRepoByTitle: PropTypes.func.isRequired,
   lastSearchedItem: PropTypes.string,

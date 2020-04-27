@@ -1,7 +1,8 @@
 export class ErrorObject {
-  constructor(message, status) {
+  constructor(message, status, type = "error") {
     this.message = message;
     this.status = status;
+    this.type = type
   }
 }
 
@@ -9,11 +10,11 @@ export const emulateResponseStatusError = (status) => {
   const errorObject = {
     response: {
       status: status,
-    }
-  }
+    },
+  };
 
   throw errorObject;
-} 
+};
 
 export const generateErrorObject = (error) => {
   if (!error || !error.response) {
@@ -24,6 +25,8 @@ export const generateErrorObject = (error) => {
   const status = error.response.status;
 
   switch (status) {
+    case 204:
+      return new ErrorObject("Nothing was found", status, "warning");
     case 422:
       return new ErrorObject("Entered the wrong value", status);
     case 523:
