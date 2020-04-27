@@ -3,17 +3,8 @@
 const host = Cypress.env("host");
 
 it("opens repo page", () => {
-  cy.server();
-  cy.route({
-    url: "**/search/*",
-  }).as("search");
-
-  cy.visit(host);
-
   const searchValue = "redux";
-
-  cy.get("input[type=text]").type(searchValue);
-  cy.wait(1000);
+  cy.search(searchValue);
 
   cy.wait("@search").then(({ response }) => {
     const items = response.body.items;
@@ -57,9 +48,11 @@ it("opens repo page", () => {
       const readme = response.body;
 
       if (readme.content) {
-        cy.get("#readme-container").should("not.contain", "No readme was provided");
+        cy.get("#readme-container").should(
+          "not.contain",
+          "No readme was provided"
+        );
       }
-
     });
   });
 });
