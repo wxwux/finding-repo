@@ -52,4 +52,6 @@ const AuthPage = ({ fetchTokenRequest, token }) => {
 const mapDispatchToPros = { fetchTokenRequest };
 const mapStateToProps = ({ token }) => ({ token });
 
-export default connect(mapStateToProps, mapDispatchToPros)(AuthPage);
+export default React.memo(
+  connect(mapStateToProps, mapDispatchToPros)(AuthPage)
+);

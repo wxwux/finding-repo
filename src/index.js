@@ -9,11 +9,11 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 const store = composeStore();
 
 ReactDOM.render(
-  <>
+  <React.Fragment>
     <CssBaseline />
     <Provider store={store}>
       <App />
     </Provider>
-  </>,
+  </React.Fragment>,
   document.getElementById("root")
 );

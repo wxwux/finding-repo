@@ -1,16 +1,21 @@
 import React, { lazy, Suspense } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { SnackbarProvider } from "notistack";
+import LinearProgress from "@material-ui/core/LinearProgress";
 
-import MainPage from "./pages/MainPage";
-import AuthPage from "./pages/AuthPage";
-import NotFoundPage from "./pages/NotFoundPage";
+const MainPage = lazy(() => import("./pages/MainPage"));
+const AuthPage = lazy(() => import("./pages/AuthPage"));
+const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
 const RepoPage = lazy(() => import("./pages/RepoPage"));
 
 const App = () => {
   return (
     <SnackbarProvider maxSnack={3}>
-      <Suspense fallback="loading">
+      <Suspense
+        fallback={
+          <LinearProgress color="secondary" style={{ width: "100%" }} />
+        }
+      >
         <Router>
           <Switch>
             <Route path="/" exact component={MainPage} />

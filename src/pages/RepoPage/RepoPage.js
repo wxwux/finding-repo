@@ -72,4 +72,6 @@ const RepoPage = ({
 const mapDispatchToProps = { fetchSingleRepoRequest, fetchReadmeRequest };
 const mapStateToProps = ({ singleRepo: repo, readme }) => ({ repo, readme });
 
-export default connect(mapStateToProps, mapDispatchToProps)(RepoPage);
+export default React.memo(
+  connect(mapStateToProps, mapDispatchToProps)(RepoPage)
+);

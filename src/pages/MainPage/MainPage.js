@@ -102,4 +102,6 @@ const mapStateToProps = (state) => ({
   user: state.user,
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(MainPage);
+export default React.memo(
+  connect(mapStateToProps, mapDispatchToProps)(MainPage)
+);
