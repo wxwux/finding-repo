@@ -120,19 +120,3 @@ export class Pagination {
     };
   }
 }
-
-const parsePaginationHeader = (linkString) => {
-  if (Boolean(linkString) === false) return [];
-
-  const links = linkString.split(", ");
-
-  const constructItemObject = (link) => {
-    const paginationLink = new PaginationLink(link);
-
-    return paginationLink.constructObject();
-  };
-
-  return links.map(constructItemObject);
-};
-
-export default parsePaginationHeader;

@@ -57,6 +57,7 @@ const SearchBar = ({ repos, findRepoByTitle, lastSearchedItem, user }) => {
       <Toolbar>
         {!user.data && (
           <IconButton
+            id="login-button"
             color="inherit"
             onClick={goToAuthPage}
             aria-label="add an alarm"
@@ -71,12 +72,12 @@ const SearchBar = ({ repos, findRepoByTitle, lastSearchedItem, user }) => {
           lastSearchedItem={lastSearchedItem}
         />
         {repos.total > 0 && (
-          <Badge badgeContent={repos.total} max={10000} color="primary">
+          <Badge id="total-repos" badgeContent={repos.total} max={10000} color="primary">
             <GitHubIcon />
           </Badge>
         )}
         {repos.responseTime > 0 && (
-          <div className={classes.time}>
+          <div className={classes.time} id="response-time">
             <TimelapseIcon />
             <div className={classes.timeAmount}>
               {convertMsToHumanFormat(repos.responseTime)}

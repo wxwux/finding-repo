@@ -26,11 +26,11 @@ const RepoInfo = ({ repo }) => {
         subscribers={repo["subscribers_count"]}
         stars={repo["stargazers_count"]}
       />
-      <Typography variant="h2" component="h1" className={classes.title}>
+      <Typography variant="h2" id="repo-title" component="h1" className={classes.title}>
         {repo.name}
       </Typography>
       <Typography variant="h6" component="h6" className={classes.changed}>
-        last changed: {relativeDate(repo["pushed_at"])}
+        last changed: <span id="last-changed">{relativeDate(repo["pushed_at"])}</span>
       </Typography>
 
       { repo.description && repo.description.length > 0 && (
@@ -46,7 +46,7 @@ const RepoInfo = ({ repo }) => {
         </>
       )}
       <Card>
-        <CardContent>
+        <CardContent id="readme-container">
           <Readme />
         </CardContent>
       </Card>

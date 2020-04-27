@@ -24,7 +24,7 @@ const Stats = ({ forks, issues, subscribers, stars }) => {
   const classes = useStyles();
 
   return (
-    <Grid className={classes.container}>
+    <Grid id="repo-stats" className={classes.container}>
       <Item icon={<CallSplitIcon />} amount={forks}></Item>
       <Divider orientation="vertical" flexItem />
       <Item icon={<BugReportIcon />} amount={issues}></Item>

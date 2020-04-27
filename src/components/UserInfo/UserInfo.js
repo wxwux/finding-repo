@@ -17,7 +17,7 @@ const UserInfo = ({ user }) => {
         title={user.login}
       ></CardMedia>
       <CardContent>
-        <Typography variant="h4" component="h4" className={classes.username}>
+        <Typography id="user-name" variant="h4" component="h4" className={classes.username}>
           {user.login}
         </Typography>
       </CardContent>

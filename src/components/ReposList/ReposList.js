@@ -15,7 +15,7 @@ const ReposList = ({ repos }) => {
 
   const Items = repos.map((repo) => {
     return (
-      <ListItem button key={repo.id}>
+      <ListItem component="li" button key={repo.id}>
         <NavLink className={classes.link} to={repo["full_name"]}>
           <div className={classes.imageWrapper}>
             <LazyLoadImage
@@ -35,7 +35,7 @@ const ReposList = ({ repos }) => {
     );
   });
 
-  return <List> {Items} </List>;
+  return <List id="results-list"> {Items} </List>;
 };
 
 export default ReposList;

@@ -21,8 +21,8 @@ const SearchHistory = ({ searchHistory, findRepoByTitle }) => {
     </Fab>
   ));
   return (
-    <div className={classes.container}>
-      <div>{historyItems}</div>
+    <div id="search-history" className={classes.container}>
+      {historyItems}
     </div>
   );
 };

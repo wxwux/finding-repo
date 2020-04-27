@@ -74,6 +74,7 @@ const MainPage = ({
       {repos.pagination.total && (
         <div className={classes.paginationContainer}>
           <Pagination
+            id="pagination"
             count={repos.pagination.total}
             onChange={handlePaginationChange}
             page={repos.pagination.active}
