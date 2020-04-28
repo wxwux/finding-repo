@@ -14,7 +14,7 @@ const initialState = {
 const singleRepoReducer = handleActions(
   {
     [fetchSingleRepoRequest]: (state, action) => ({
-      ...state,
+      data: null,
       error: null,
       pending: true,
     }),
@@ -24,7 +24,7 @@ const singleRepoReducer = handleActions(
       data: action.payload,
     }),
     [fetchSingleRepoFailure]: (state, action) => ({
-      ...state,
+      data: null,
       pending: false,
       error: action.payload,
     })

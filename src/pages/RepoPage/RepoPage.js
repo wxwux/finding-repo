@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useLayoutEffect } from "react";
 import { useParams } from "react-router-dom";
 import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
@@ -31,7 +31,7 @@ const RepoPage = ({
 
   const { enqueueSnackbar } = useSnackbar();
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     fetchSingleRepoRequest({
       owner,
       title,
