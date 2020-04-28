@@ -1,4 +1,4 @@
-import { takeLatest, call, put, select } from "redux-saga/effects";
+import { takeLatest, call, put, fork, select } from "redux-saga/effects";
 
 import {
   fetchReposByQueryRequest,
@@ -6,7 +6,7 @@ import {
   fetchReposByQueryFailure,
   addSearchHistoryItem,
   getReposFromCache,
-  clearReposCache
+  clearReposCache,
 } from "../actions";
 
 import {
@@ -27,46 +27,64 @@ const searchHistory = function* (query) {
 
 const pageSelector = (state, page) => state.repos.storage[page];
 
+const requestForRepos = function* (query) {
+  try {
+    const result = yield call(reposService.fetchReposByQuery, query);
+
+    if (result.data.items.length === 0)
+      yield call(emulateResponseStatusError(204));
+
+    const pagination = new Pagination(result.headers.link);
+    const paginationObject = pagination.generate();
+    const activeLink = paginationObject.active;
+
+    yield put(
+      fetchReposByQuerySuccess({
+        data: result.data.items,
+        storage: {
+          [activeLink]: {
+            data: result.data.items,
+            pagination: paginationObject,
+          },
+        },
+        pagination: paginationObject,
+        total: result.data["total_count"],
+        responseTime: result.responseTime,
+      })
+    );
+    yield call(searchHistory, query);
+  } catch (error) {
+    const errorObject = generateErrorObject(error);
+    yield put(fetchReposByQueryFailure(errorObject));
+  }
+};
+
+const getCachedItems = function* (query) {
+  const page = getParamFromQueryString(query.toString(), "page");
+  const items = yield select(pageSelector, page);
+  const itemsChached = items && items.data.length > 0;
+
+  return {
+    areFound: Boolean(itemsChached),
+    items: items,
+  };
+};
+
 export const reposList = function* (query) {
   try {
-    const page = getParamFromQueryString(query.toString(), "page");
-    const items = yield select(pageSelector, page);
-    const itemsChached = items && items.data.length > 0;
+    const cachedItems = yield call(getCachedItems, query);
 
     if (query.type === "title") {
       yield put(clearReposCache());
     }
 
-    if (Boolean(itemsChached) === false) {
-      const result = yield call(reposService.fetchReposByQuery, query);
-      if (result.data.items.length === 0) {
-        yield call(emulateResponseStatusError(204));
-      } else {
-        const pagination = new Pagination(result.headers.link);
-        const paginationObject = pagination.generate();
-        const activeLink = paginationObject.active;
-
-        yield put(
-          fetchReposByQuerySuccess({
-            data: result.data.items,
-            storage: {
-              [activeLink]: {
-                data: result.data.items,
-                pagination: paginationObject,
-              },
-            },
-            pagination: paginationObject,
-            total: result.data["total_count"],
-            responseTime: result.responseTime,
-          })
-        );
-        yield call(searchHistory, query);
-      }
+    if (cachedItems.areFound === false) {
+      yield fork(requestForRepos, query);
     } else {
       yield put(
         getReposFromCache({
-          data: items.data,
-          pagination: items.pagination,
+          data: cachedItems.items.data,
+          pagination: cachedItems.items.pagination,
         })
       );
     }
