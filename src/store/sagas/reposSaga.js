@@ -16,7 +16,7 @@ import {
 import { Pagination } from "../../helpers/pagination";
 import { getParamFromQueryString } from "../../helpers/queries";
 
-import * as reposService from "../../services";
+import * as reposService from "../../services/repos";
 
 const searchHistory = function* (query) {
   if (query.type !== "title") return;

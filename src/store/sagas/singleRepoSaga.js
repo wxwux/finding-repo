@@ -8,7 +8,7 @@ import {
 } from "../actions";
 import { generateErrorObject } from "../../helpers/errors";
 
-import * as reposService from "../../services";
+import * as reposService from "../../services/repos";
 
 const readme = function* (repoInfo) {
   const { owner, title } = repoInfo;
