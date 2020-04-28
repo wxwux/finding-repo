@@ -27,7 +27,7 @@ const searchHistory = function* (query) {
 
 const pageSelector = (state, page) => state.repos.storage[page];
 
-const requestForRepos = function* (query) {
+export const requestForRepos = function* (query) {
   try {
     const result = yield call(reposService.fetchReposByQuery, query);
 

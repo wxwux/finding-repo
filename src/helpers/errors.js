@@ -19,7 +19,7 @@ export const emulateResponseStatusError = (status) => {
 
 export const generateErrorObject = (error) => {
   if (!error || !error.response) {
-    console.warn("no response object were provided");
+    console.warn("no response object was provided");
     return new ErrorObject(520);
   }
 

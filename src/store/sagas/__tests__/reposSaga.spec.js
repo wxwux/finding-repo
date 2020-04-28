@@ -1,7 +1,7 @@
 import { runSaga } from "redux-saga";
-import { reposList } from "../reposSaga";
+import { requestForRepos } from "../reposSaga";
 import { queryConstructor } from "../../../helpers/queries";
-import * as service from "../../../services";
+import * as service from "../../../services/repos";
 
 const responseObj = {
   data: {
@@ -26,8 +26,10 @@ describe("loads the repos and store then in case of success", () => {
     service.fetchReposByQuery = jest.fn(() => Promise.resolve(responseObj));
 
     const query = queryConstructor.byTitle("react");
-    await runSaga(store, reposList, query).done;
+    await runSaga(store, requestForRepos, query).done;
 
+    console.log('dispatched', dispatched);
+    
     payload = dispatched[0].payload;
   });
 
@@ -68,7 +70,7 @@ it("puts unknown error object", async () => {
   service.fetchReposByQuery = jest.fn(() => Promise.reject(errorObj));
 
   const query = queryConstructor.byTitle("react");
-  await runSaga(store, reposList, query).done;
+  await runSaga(store, requestForRepos, query).done;
 
   const { payload } = dispatched[0];
 

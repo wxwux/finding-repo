@@ -3,15 +3,15 @@ module.exports = {
     "<rootDir>/src"
   ],
   "collectCoverageFrom": [
-    "src/**/*.{js}",
+    "src/**/*.js",
     "!src/**/*.d.ts"
   ],
   "setupFilesAfterEnv": [
     "<rootDir>/jest/setupTests.js"
   ],
   "testMatch": [
-    "<rootDir>/src/**/__tests__/**/*.{js}",
-    "<rootDir>/src/**/*.{spec,test}.{js}"
+    "<rootDir>/src/**/__tests__/**/*.js",
+    "<rootDir>/src/**/*.{spec,test}.js"
   ],
   "transform": {
     "^.+\\.(js|jsx|ts|tsx)$": "<rootDir>/node_modules/babel-jest",

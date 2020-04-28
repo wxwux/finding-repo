@@ -46,17 +46,6 @@ it("paginates correctly", () => {
     expect(getPageValueFromUrl(pagination.next)).to.equal(3);
     expect(getPageValueFromUrl(pagination.prev)).to.equal(1);
 
-    const titles = [];
-    cy.get("#results-list li")
-      .each((item) => {
-        titles.push(item.text());
-      })
-      .then(() => {
-        const itemsShownCorrectly = items.every(
-          (item, ndx) => item.name === titles[ndx]
-        );
-
-        expect(itemsShownCorrectly).to.be.true;
-      });
+    cy.expectDataAppearedInListCorrectly("#results-list li", items)
   });
 });
