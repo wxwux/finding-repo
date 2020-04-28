@@ -19,7 +19,7 @@ const singleRepoReducer = handleActions(
       pending: true,
     }),
     [fetchSingleRepoSuccess]: (state, action) => ({
-      ...state,
+      error: null,
       pending: false,
       data: action.payload,
     }),
