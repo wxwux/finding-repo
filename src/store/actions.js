@@ -10,6 +10,14 @@ export const fetchReposByQueryFailure = createAction(
   "FETCH_REPOS_BY_QUERY_FAILURE"
 );
 
+export const getReposFromCache = createAction(
+  "GET_REPOS_FROM_CACHE"
+)
+
+export const clearReposCache = createAction(
+  "CLEAR_REPOS_CACHE"
+)
+
 export const fetchSingleRepoSuccess = createAction("FETCH_SINGLE_REPO_SUCCESS");
 export const fetchSingleRepoRequest = createAction("FETCH_SINGLE_REPO_REQUEST");
 export const fetchSingleRepoFailure = createAction("FETCH_SINGLE_REPO_FAILURE");

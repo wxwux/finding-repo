@@ -6,3 +6,4 @@ export const lastSearchSelector = createSelector(
   searchHistory,
   (history) => history[0]
 );
+
