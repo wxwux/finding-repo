@@ -1,7 +1,7 @@
 import $axios from "../requests";
 export const corsProxy = "https://cors-anywhere.herokuapp.com";
 
-const baseURL = `${corsProxy}/https://github.com/`;
+const baseURL = `${corsProxy}/https://github.com`;
 
 export const authorizeLink = "https://github.com/login/oauth/authorize";
 export const clientId = "9e2a2d966d712540e176";
