@@ -89,8 +89,6 @@ export const reposList = function* (query) {
       );
     }
   } catch (error) {
-    console.log(error);
-
     const errorObject = generateErrorObject(error);
     yield put(fetchReposByQueryFailure(errorObject));
   }

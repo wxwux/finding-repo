@@ -35,12 +35,8 @@ const tokenSaga = function* () {
 
 const logout = function* () {
   yield takeLatest(logoutUser, function () {
-    try {
-      localStorage.removeItem("token");
-      window.location.replace("/");
-    } catch (error) {
-      console.log(error);
-    }
+    localStorage.removeItem("token");
+    window.location.replace("/");
   });
 };
 

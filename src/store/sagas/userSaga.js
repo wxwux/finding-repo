@@ -14,7 +14,6 @@ const userSaga = function* () {
     try {
       const result = yield call(getUser);
       yield put(fetchUserSuccess(result.data));
-      console.log("userresult", result);
     } catch (error) {
       const errorObject = generateErrorObject(error);
       yield put(fetchUserFailure(errorObject));
