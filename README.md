@@ -10,5 +10,3 @@
 + i18n
 + Webpack
 + GitHub API
-
-[The link](http://ct37429.tmweb.ru/)
